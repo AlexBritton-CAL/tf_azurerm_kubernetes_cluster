@@ -1,16 +1,16 @@
 locals {
 
-  kubernetes_cluster_shallow      = merge(local.module_defaults.kubernetes_cluster, var.config)
+  kubernetes_cluster_shallow = merge(local.module_defaults.kubernetes_cluster, var.config)
 
   kubernetes_cluster = merge(
     local.kubernetes_cluster_shallow,
     {
-      default_node_pool = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}))
+      default_node_pool               = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}))
       maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}))
-      maintenance_window_node_os = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}))
-      tags = merge(var.global_config.global.tags, local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
+      maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}))
+      tags                            = merge(var.global_config.global.tags, local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
     }
-  )  
+  )
 
   kubernetes_cluster_name = local.kubernetes_cluster.generate_name ? "${var.resource_prefix}-${var.instance_name}-aks" : var.name
 }
@@ -34,11 +34,14 @@ resource "azurerm_kubernetes_cluster" "this" {
     tenant_id          = local.kubernetes_cluster.azure_active_directory_role_based_access_control.tenant_id
   }
 
-  private_cluster_enabled = local.kubernetes_cluster.private_cluster_enabled
-  private_dns_zone_id    = local.kubernetes_cluster.private_dns_zone_id
+  private_cluster_enabled    = local.kubernetes_cluster.private_cluster_enabled
+  private_dns_zone_id        = local.kubernetes_cluster.private_dns_zone_id
   dns_prefix_private_cluster = local.kubernetes_cluster.dns_prefix_private_cluster
-  dns_prefix             = local.kubernetes_cluster.private_cluster_enabled ? null : local.kubernetes_cluster.dns_prefix
+  dns_prefix                 = local.kubernetes_cluster.private_cluster_enabled ? null : local.kubernetes_cluster.dns_prefix
 
+  automatic_upgrade_channel = local.kubernetes_cluster.automatic_upgrade_channel
+
+  workload_identity_enabled = local.kubernetes_cluster.workload_identity_enabled
 
   network_profile {
     network_plugin      = local.kubernetes_cluster.network_profile.network_plugin
@@ -61,11 +64,15 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name       = local.kubernetes_cluster.default_node_pool.name
-    node_count = local.kubernetes_cluster.default_node_pool.node_count
-    vm_size    = local.kubernetes_cluster.default_node_pool.vm_size
-    zones      = local.kubernetes_cluster.default_node_pool.zones
-    tags       = local.kubernetes_cluster.default_node_pool.tags
+    name                        = local.kubernetes_cluster.default_node_pool.name
+    min_count                   = local.kubernetes_cluster.default_node_pool.min_count
+    node_count                  = local.kubernetes_cluster.default_node_pool.node_count
+    max_count                   = local.kubernetes_cluster.default_node_pool.max_count
+    auto_scaling_enabled        = local.kubernetes_cluster.default_node_pool.auto_scaling_enabled
+    vm_size                     = local.kubernetes_cluster.default_node_pool.vm_size
+    temporary_name_for_rotation = local.kubernetes_cluster.default_node_pool.temporary_name_for_rotation
+    zones                       = local.kubernetes_cluster.default_node_pool.zones
+    tags                        = local.kubernetes_cluster.default_node_pool.tags
   }
 
   identity {

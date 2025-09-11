@@ -5,10 +5,14 @@ locals {
       node_resource_group = try(var.config.node_resource_group_name, replace(var.resource_group_name, "-rg", "-nodes-rg"))
       oidc_issuer_enabled = true
 
-      private_cluster_enabled = true
-      private_dns_zone_id = "/subscriptions/31b3d3dc-ce6e-4757-ad94-4111b7c4240e/resourceGroups/infcorp_azuks_private_dns_zones_rg/providers/Microsoft.Network/privateDnsZones/privatelink.uksouth.azmk8s.io"  # Replace with actual default value
-      dns_prefix_private_cluster =  replace("${var.resource_prefix}-${var.instance_name}-aks", "_", "-")
-      dns_prefix = "publicaks01"
+      private_cluster_enabled    = true
+      private_dns_zone_id        = "/subscriptions/31b3d3dc-ce6e-4757-ad94-4111b7c4240e/resourceGroups/infcorp_azuks_private_dns_zones_rg/providers/Microsoft.Network/privateDnsZones/privatelink.uksouth.azmk8s.io" # Replace with actual default value
+      dns_prefix_private_cluster = replace("${var.resource_prefix}-${var.instance_name}-aks", "_", "-")
+      dns_prefix                 = "publicaks01"
+
+      automatic_upgrade_channel = "stable"
+
+      workload_identity_enabled = true
 
       local_account_disabled = true
       azure_active_directory_role_based_access_control = {
