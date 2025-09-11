@@ -73,6 +73,9 @@ resource "azurerm_kubernetes_cluster" "this" {
     temporary_name_for_rotation  = local.kubernetes_cluster.default_node_pool.temporary_name_for_rotation
     only_critical_addons_enabled = local.kubernetes_cluster.default_node_pool.only_critical_addons_enabled
     zones                        = local.kubernetes_cluster.default_node_pool.zones
+    vnet_subnet_id               = local.kubernetes_cluster.default_node_pool.vnet_subnet_id
+    node_public_ip_enabled       = local.kubernetes_cluster.default_node_pool.node_public_ip_enabled
+
 
     upgrade_settings {
       max_surge = local.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge
