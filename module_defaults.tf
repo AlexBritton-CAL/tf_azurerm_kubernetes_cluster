@@ -47,7 +47,7 @@ locals {
         temporary_name_for_rotation  = "systemtemp"
         only_critical_addons_enabled = true
         zones                        = ["1", "2", "3"]                                                                                                                                                             # Deploy across availability zones
-        vnet_subnet_id               = "/subscriptions/7a6ebd58-54ee-4885-88d7-7258df76bacc/resourceGroups/np-spok2-uks-network-rg/providers/Microsoft.Network/virtualNetworks/np-spok2-uks-vnet/subnets/aks-snet" # UPDATE LATER - Provide subnet ID if using existing VNet
+        vnet_subnet_id               = "/subscriptions/${var.global_config.global.subscription_id}/resourceGroups/${var.global_config.global.spoke.network.resource_group_name}/providers/Microsoft.Network/virtualNetworks/${var.global_config.global.spoke.network.virtual_network_name}/subnets/aks-snet" # UPDATE LATER - Provide subnet ID if using existing VNet
         node_public_ip_enabled       = false
 
         upgrade_settings = {
