@@ -85,6 +85,11 @@ locals {
         start_time  = "02:00"
         utc_offset  = "+00:00"
       }
+
+      workload_autoscaler_profile = {
+        keda_enabled                    = true
+        vertical_pod_autoscaler_enabled = true
+      }
     }
   }
 }

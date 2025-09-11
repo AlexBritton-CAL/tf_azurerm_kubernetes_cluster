@@ -8,6 +8,7 @@ locals {
       default_node_pool               = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}))
       maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}))
       maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}))
+      workload_autoscaler_profile     = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))      
       tags                            = merge(var.global_config.global.tags, local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
     }
   )
@@ -114,6 +115,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     day_of_week = local.kubernetes_cluster.maintenance_window_node_os.day_of_week
     start_time  = local.kubernetes_cluster.maintenance_window_node_os.start_time
     utc_offset  = local.kubernetes_cluster.maintenance_window_node_os.utc_offset
+  }
+  workload_autoscaler_profile {
+    keda_enabled                    = local.kubernetes_cluster.workload_autoscaler_profile.keda_enabled
+    vertical_pod_autoscaler_enabled = local.kubernetes_cluster.workload_autoscaler_profile.vertical_pod_autoscaler_enabled
   }
 }
 
