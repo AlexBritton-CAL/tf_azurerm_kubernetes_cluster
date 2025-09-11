@@ -38,7 +38,7 @@ locals {
       }
 
       default_node_pool = {
-        name                         = "system"
+        name                         = "system_pool"
         min_count                    = 2
         node_count                   = 2
         max_count                    = 5
