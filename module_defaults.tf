@@ -11,9 +11,9 @@ locals {
       }
 
       private_cluster_enabled    = true
-      private_dns_zone_id        = "/subscriptions/31b3d3dc-ce6e-4757-ad94-4111b7c4240e/resourceGroups/infcorp_azuks_private_dns_zones_rg/providers/Microsoft.Network/privateDnsZones/privatelink.uksouth.azmk8s.io" # Replace with actual default value
+      private_dns_zone_id        = "/subscriptions/31b3d3dc-ce6e-4757-ad94-4111b7c4240e/resourceGroups/infcorp_azuks_private_dns_zones_rg/providers/Microsoft.Network/privateDnsZones/privatelink.uksouth.azmk8s.io" # UPDATE LATER - Provide your private DNS zone ID
       dns_prefix_private_cluster = replace("${var.resource_prefix}-${var.instance_name}-aks", "_", "-")
-      dns_prefix                 = "publicaks01"
+      dns_prefix                 = "publicaks01" # UPDATE LATER - Provide a unique DNS prefix for public cluster
 
       automatic_upgrade_channel = "stable"
 
@@ -38,15 +38,22 @@ locals {
       }
 
       default_node_pool = {
-        name                        = "system"
-        min_count                   = 1
-        node_count                  = 2
-        max_count                   = 3
-        auto_scaling_enabled        = true
-        vm_size                     = "Standard_B4s_v2"
-        temporary_name_for_rotation = "systemtemp"
-        zones                       = ["1", "2", "3"] # Deploy across availability zones
-        tags                        = {}
+        name                         = "system"
+        min_count                    = 2
+        node_count                   = 2
+        max_count                    = 5
+        auto_scaling_enabled         = true
+        vm_size                      = "Standard_B4s_v2"
+        temporary_name_for_rotation  = "systemtemp"
+        only_critical_addons_enabled = true
+        zones                        = ["1", "2", "3"] # Deploy across availability zones
+        vnet_subnet_id               = "/subscriptions/7a6ebd58-54ee-4885-88d7-7258df76bacc/resourceGroups/np-spok2-uks-network-rg/providers/Microsoft.Network/virtualNetworks/np-spok2-uks-vnet/subnets/aks-snet"            # UPDATE LATER - Provide subnet ID if using existing VNet
+
+        upgrade_settings = {
+          max_surge = "10%"
+        }
+
+        tags = {}
       }
 
       identity = {

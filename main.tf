@@ -64,15 +64,21 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                        = local.kubernetes_cluster.default_node_pool.name
-    min_count                   = local.kubernetes_cluster.default_node_pool.min_count
-    node_count                  = local.kubernetes_cluster.default_node_pool.node_count
-    max_count                   = local.kubernetes_cluster.default_node_pool.max_count
-    auto_scaling_enabled        = local.kubernetes_cluster.default_node_pool.auto_scaling_enabled
-    vm_size                     = local.kubernetes_cluster.default_node_pool.vm_size
-    temporary_name_for_rotation = local.kubernetes_cluster.default_node_pool.temporary_name_for_rotation
-    zones                       = local.kubernetes_cluster.default_node_pool.zones
-    tags                        = local.kubernetes_cluster.default_node_pool.tags
+    name                         = local.kubernetes_cluster.default_node_pool.name
+    min_count                    = local.kubernetes_cluster.default_node_pool.min_count
+    node_count                   = local.kubernetes_cluster.default_node_pool.node_count
+    max_count                    = local.kubernetes_cluster.default_node_pool.max_count
+    auto_scaling_enabled         = local.kubernetes_cluster.default_node_pool.auto_scaling_enabled
+    vm_size                      = local.kubernetes_cluster.default_node_pool.vm_size
+    temporary_name_for_rotation  = local.kubernetes_cluster.default_node_pool.temporary_name_for_rotation
+    only_critical_addons_enabled = local.kubernetes_cluster.default_node_pool.only_critical_addons_enabled
+    zones                        = local.kubernetes_cluster.default_node_pool.zones
+
+    upgrade_settings {
+      max_surge = local.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge
+    }
+
+    tags = local.kubernetes_cluster.default_node_pool.tags
   }
 
   identity {
