@@ -89,6 +89,12 @@ resource "azurerm_kubernetes_cluster" "this" {
     identity_ids = local.kubernetes_cluster.identity.identity_ids
   }
 
+  kubelet_identity {
+    client_id                 = local.kubernetes_cluster.kubelet_identity.client_id
+    object_id                 = local.kubernetes_cluster.kubelet_identity.object_id
+    user_assigned_identity_id = local.kubernetes_cluster.kubelet_identity.user_assigned_identity_id
+  }
+
   kubernetes_version = local.kubernetes_cluster.kubernetes_version
   tags               = local.kubernetes_cluster.tags
 

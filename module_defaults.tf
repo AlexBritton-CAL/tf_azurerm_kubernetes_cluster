@@ -58,8 +58,8 @@ locals {
       }
 
       identity = {
-        type         = "SystemAssigned" # Use system-assigned managed identity
-        identity_ids = null             # User-assigned identities (null for system-assigned)
+        type         = "UserAssigned" # Use user-assigned managed identity
+        identity_ids = [azurerm_user_assigned_identity.cluster_identity[each.key].id] # User-assigned identities (null for system-assigned)
       }
 
       kubernetes_version = null # Use latest stable version (null = Azure default)
