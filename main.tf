@@ -25,7 +25,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   name                   = local.kubernetes_cluster_name
   location               = try(local.kubernetes_cluster.location, var.global_config.global.location)
   resource_group_name    = var.resource_group_name
-  dns_prefix             = local.kubernetes_cluster.dns_prefix
   node_resource_group    = local.kubernetes_cluster.node_resource_group
   oidc_issuer_enabled    = local.kubernetes_cluster.oidc_issuer_enabled
   local_account_disabled = local.kubernetes_cluster.local_account_disabled
@@ -36,6 +35,10 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   private_cluster_enabled = local.kubernetes_cluster.private_cluster_enabled
+  private_dns_zone_id    = local.kubernetes_cluster.private_dns_zone_id
+  dns_prefix_private_cluster = local.kubernetes_cluster.dns_prefix_private_cluster
+  dns_prefix             = local.kubernetes_cluster.private_cluster_enabled ? null : local.kubernetes_cluster.dns_prefix
+
 
   network_profile {
     network_plugin      = local.kubernetes_cluster.network_profile.network_plugin

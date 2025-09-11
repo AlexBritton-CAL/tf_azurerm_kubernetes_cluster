@@ -6,6 +6,9 @@ locals {
       oidc_issuer_enabled = true
 
       private_cluster_enabled = true
+      private_dns_zone_id = "DEFAULT_VALUE"  # Replace with actual default value
+      dns_prefix_private_cluster = "DEFAULT_VALUE"  # Replace with actual default value
+      dns_prefix = "publicaks01"  # Replace with actual default value
 
       local_account_disabled = true
       azure_active_directory_role_based_access_control = {
