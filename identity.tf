@@ -1,12 +1,12 @@
 resource "azurerm_user_assigned_identity" "kubelet_identity" {
-  location            = azurerm_kubernetes_cluster.this.location
-  name                = try(local.kubernetes_cluster.identity.kubelet_identity_name, "${local.kubernetes_cluster_name}-kubeletid")
+  location            = try(local.kubernetes_cluster.location, var.global_config.global.location)
+  name                = "${local.kubernetes_cluster_name}-kubeletid"
   resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_user_assigned_identity" "cluster_identity" {
-  location            = azurerm_kubernetes_cluster.this.location
-  name                = try(local.kubernetes_cluster.identity.cluster_identity_name, "${local.kubernetes_cluster_name}-clusterid")
+  location            = try(local.kubernetes_cluster.location, var.global_config.global.location)
+  name                = "${local.kubernetes_cluster_name}-clusterid"
   resource_group_name = var.resource_group_name
 }
 

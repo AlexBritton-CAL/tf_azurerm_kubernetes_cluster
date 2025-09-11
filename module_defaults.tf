@@ -58,9 +58,9 @@ locals {
       }
 
       identity = {
-        type         = "UserAssigned"                                                 # Use user-assigned managed identity
+        type = "UserAssigned" # Use user-assigned managed identity
       }
-      
+
       kubernetes_version = null # Use latest stable version (null = Azure default)
 
       tags = {
