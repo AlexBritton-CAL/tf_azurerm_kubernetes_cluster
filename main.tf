@@ -86,13 +86,13 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   identity {
     type         = local.kubernetes_cluster.identity.type
-    identity_ids = local.kubernetes_cluster.identity.type == "UserAssigned" ? [azurerm_user_assigned_identity.cluster_identity[each.key].id] : []
+    identity_ids = local.kubernetes_cluster.identity.type == "UserAssigned" ? [azurerm_user_assigned_identity.cluster_identity.id] : []
   }
 
   kubelet_identity {
-    client_id                 = azurerm_user_assigned_identity.kubelet_identity[each.key].client_id
-    object_id                 = azurerm_user_assigned_identity.kubelet_identity[each.key].principal_id
-    user_assigned_identity_id = azurerm_user_assigned_identity.kubelet_identity[each.key].id
+    client_id                 = azurerm_user_assigned_identity.kubelet_identity.client_id
+    object_id                 = azurerm_user_assigned_identity.kubelet_identity.principal_id
+    user_assigned_identity_id = azurerm_user_assigned_identity.kubelet_identity.id
   }
 
   kubernetes_version = local.kubernetes_cluster.kubernetes_version
