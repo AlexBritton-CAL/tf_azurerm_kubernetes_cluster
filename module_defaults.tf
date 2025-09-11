@@ -58,8 +58,14 @@ locals {
       }
 
       identity = {
-        type         = "UserAssigned" # Use user-assigned managed identity
+        type         = "UserAssigned"                                                 # Use user-assigned managed identity
         identity_ids = [azurerm_user_assigned_identity.cluster_identity[each.key].id] # User-assigned identities (null for system-assigned)
+      }
+
+      kubelet_identity = {
+        client_id                 = azurerm_user_assigned_identity.kubelet_identity[each.key].client_id
+        object_id                 = azurerm_user_assigned_identity.kubelet_identity[each.key].principal_id
+        user_assigned_identity_id = azurerm_user_assigned_identity.kubelet_identity[each.key].id
       }
 
       kubernetes_version = null # Use latest stable version (null = Azure default)
