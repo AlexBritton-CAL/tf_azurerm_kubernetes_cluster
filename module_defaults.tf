@@ -6,7 +6,7 @@ locals {
       oidc_issuer_enabled = true
 
       private_cluster_enabled = true
-      private_dns_zone_id = "DEFAULT_VALUE"  # Replace with actual default value
+      private_dns_zone_id = "/subscriptions/31b3d3dc-ce6e-4757-ad94-4111b7c4240e/resourceGroups/infcorp_azuks_private_dns_zones_rg/providers/Microsoft.Network/privateDnsZones/privatelink.uksouth.azmk8s.io"  # Replace with actual default value
       dns_prefix_private_cluster = "DEFAULT_VALUE"  # Replace with actual default value
       dns_prefix = "publicaks01"  # Replace with actual default value
 
