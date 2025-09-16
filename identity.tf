@@ -32,13 +32,6 @@ data "azurerm_virtual_network" "this" {
   resource_group_name = local.vnet_resource_group_name
 }
 
-resource "azurerm_role_assignment" "cluster_kubelet_id" {
-  principal_id                     = azurerm_user_assigned_identity.cluster_identity.principal_id
-  role_definition_name             = "Managed Identity Operator"
-  scope                            = azurerm_user_assigned_identity.cluster_kubelet_id.id
-  skip_service_principal_aad_check = true
-}
-
 resource "azurerm_role_assignment" "cluster_vnet" { # Required to deploy istio internal load balancer
   principal_id                     = azurerm_user_assigned_identity.cluster_identity.principal_id
   role_definition_name             = "Contributor"
