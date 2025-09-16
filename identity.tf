@@ -22,7 +22,7 @@ resource "azurerm_role_assignment" "cluster_kubelet_id" {
 }
 
 data "azurerm_private_dns_zone" "aks" {
-  name                = "privatelink.${azurerm_resource_group.this.location}.azmk8s.io"
+  name                = "privatelink.${try(local.kubernetes_cluster.location, var.global_config.global.location)}.azmk8s.io"
   resource_group_name = var.config.privatelink_dns_zones.rg_name
   provider            = azurerm.privatelink_dns
 }
