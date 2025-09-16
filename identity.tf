@@ -1,5 +1,5 @@
 locals {
-  vnet_name = var.global_config.spoke.network.virtual_network_name
+  vnet_name = var.global_config.global.spoke.network.virtual_network_name
   vnet_resource_group_name = var.global_config.global.spoke.network.virtual_network_resource_group_name
 }
 resource "azurerm_user_assigned_identity" "kubelet_identity" {
