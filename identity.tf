@@ -28,8 +28,8 @@ data "azurerm_private_dns_zone" "aks" {
 }
 
 data "azurerm_virtual_network" "this" {
-  name                = var.config.vnet_name
-  resource_group_name = var.config.vnet_rg_name
+  name                = local.vnet_name
+  resource_group_name = local.vnet_resource_group_name
 }
 
 # resource "azurerm_role_assignment" "cluster_kubelet_id" {
