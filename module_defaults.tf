@@ -91,7 +91,7 @@ locals {
         vertical_pod_autoscaler_enabled = true
       }
 
-      private_link_service.name = {
+      private_link_service = {
         name = "plink"
         subnet_id = "/subscriptions/${var.global_config.global.subscription_id}/resourceGroups/${var.global_config.global.spoke.network.virtual_network_resource_group_name}/providers/Microsoft.Network/virtualNetworks/${var.global_config.global.spoke.network.virtual_network_name}/subnets/app-snet"
       }
