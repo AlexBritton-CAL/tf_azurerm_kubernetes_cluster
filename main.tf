@@ -140,6 +140,25 @@ data "azurerm_lb" "kubernetes_internal" {
   ]
 }
 
+resource "azurerm_private_link_service" "aks_lb_privatelink" {
+  name                = local.kubernetes_cluster.private_link_service.name
+  resource_group_name = azurerm_kubernetes_cluster.this.resource_group_name
+  location            = azurerm_kubernetes_cluster.this..location
+
+  # auto_approval_subscription_ids              = ["00000000-0000-0000-0000-000000000000"]
+  # visibility_subscription_ids                 = ["00000000-0000-0000-0000-000000000000"]
+  load_balancer_frontend_ip_configuration_ids = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].id]
+
+  nat_ip_configuration {
+    name      = "primary"
+    subnet_id = local.kubernetes_cluster.private_link_service.name.subnet_id
+    primary   = true
+  }
+  lifecycle {
+    ignore_changes = [ load_balancer_frontend_ip_configuration_ids ]
+  }
+}
+
 data "azurerm_container_registry" "this" {
   name                = local.kubernetes_cluster.container_registry.name
   resource_group_name = local.kubernetes_cluster.container_registry.resource_group_name
