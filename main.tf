@@ -130,3 +130,12 @@ module "azurerm_kubernetes_cluster_node_pool" {
   global_config                 = var.global_config
   azurerm_kubernetes_cluster_id = azurerm_kubernetes_cluster.this.id
 }
+
+data "azurerm_lb" "kubernetes_internal" {
+  name                = "kubernetes-internal"
+  resource_group_name = regex("[^/]+$", azurerm_kubernetes_cluster.aks["cluster"].node_resource_group_id)
+
+  depends_on = [
+    azurerm_kubernetes_cluster.this
+  ]
+}
