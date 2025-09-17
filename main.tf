@@ -144,3 +144,9 @@ data "azurerm_container_registry" "this" {
   name                = local.kubernetes_cluster.container_registry.name
   resource_group_name = local.kubernetes_cluster.container_registry.resource_group_name
 }
+
+resource "azurerm_role_assignment" "acr_pull" {
+  scope                = data.azurerm_container_registry.this.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.kubelet_identity.principal_id
+}
