@@ -143,7 +143,7 @@ data "azurerm_lb" "kubernetes_internal" {
 resource "azurerm_private_link_service" "aks_lb_privatelink" {
   name                = local.kubernetes_cluster.private_link_service.name
   resource_group_name = azurerm_kubernetes_cluster.this.resource_group_name
-  location            = azurerm_kubernetes_cluster.this..location
+  location            = azurerm_kubernetes_cluster.this.location
 
   # auto_approval_subscription_ids              = ["00000000-0000-0000-0000-000000000000"]
   # visibility_subscription_ids                 = ["00000000-0000-0000-0000-000000000000"]
