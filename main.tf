@@ -139,3 +139,8 @@ data "azurerm_lb" "kubernetes_internal" {
     azurerm_kubernetes_cluster.this
   ]
 }
+
+data "azurerm_container_registry" "this" {
+  name                = local.kubernetes_cluster.container_registry.name
+  resource_group_name = local.kubernetes_cluster.container_registry.resource_group_name
+}
