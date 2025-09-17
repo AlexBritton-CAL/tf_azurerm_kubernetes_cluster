@@ -151,7 +151,7 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
 
   nat_ip_configuration {
     name      = "primary"
-    subnet_id = local.kubernetes_cluster.private_link_service.name.subnet_id
+    subnet_id = local.kubernetes_cluster.private_link_service.subnet_id
     primary   = true
   }
   lifecycle {
