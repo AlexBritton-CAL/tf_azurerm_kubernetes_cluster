@@ -39,9 +39,9 @@ resource "azurerm_role_assignment" "cluster_vnet" { # Required to deploy istio i
   skip_service_principal_aad_check = true
 }
 
-# resource "azurerm_role_assignment" "cluster_aks_cluster_dns_zone" {
-#   principal_id                     = azurerm_user_assigned_identity.cluster_identity.principal_id
-#   role_definition_name             = "Private DNS Zone Contributor"
-#   scope                            = data.azurerm_private_dns_zone.aks.id
-#   skip_service_principal_aad_check = true
-# }
+resource "azurerm_role_assignment" "cluster_aks_cluster_dns_zone" {
+  principal_id                     = azurerm_user_assigned_identity.cluster_identity.principal_id
+  role_definition_name             = "Private DNS Zone Contributor"
+  scope                            = data.azurerm_private_dns_zone.aks.id
+  skip_service_principal_aad_check = true
+}
