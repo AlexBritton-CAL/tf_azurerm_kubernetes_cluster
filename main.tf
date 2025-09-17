@@ -133,7 +133,7 @@ module "azurerm_kubernetes_cluster_node_pool" {
 
 data "azurerm_lb" "kubernetes_internal" {
   name                = "kubernetes-internal"
-  resource_group_name = regex("[^/]+$", azurerm_kubernetes_cluster.aks["cluster"].node_resource_group_id)
+  resource_group_name = regex("[^/]+$", azurerm_kubernetes_cluster.this.node_resource_group_id)
 
   depends_on = [
     azurerm_kubernetes_cluster.this
