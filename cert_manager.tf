@@ -9,6 +9,12 @@ resource "azurerm_user_assigned_identity" "certmanager" {
   resource_group_name = var.resource_group_name
 }
 
+data "azurerm_dns_zone" "public_dns_zone" {
+  name                = "calastonenp.com"
+  resource_group_name = var.config.public_dns_zone.rg_name
+  provider            = azurerm.public_dns
+}
+
 # # resource "azurerm_role_assignment" "certmanager_public_dns" {
 # #   for_each                         = local.aks
 # #   principal_id                     = azurerm_user_assigned_identity.certmanager[each.key].principal_id
