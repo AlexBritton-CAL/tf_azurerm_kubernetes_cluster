@@ -1,0 +1,17 @@
+azurerm_kubernetes_cluster:
+  abshared_aks:
+    generate_name: true
+    tags:
+      CostCenter: "IT"
+      ConfigTag: "ConfigValue"
+      ManagedBy: "UserConfig"
+    default_node_pool:
+      name: "default"
+      vm_size: "Standard_B2ms"
+    node_pools:
+      unp1:
+        vm_size: "Standard_B2ms"
+        max_pods: 30
+    container_registry:
+      name: calastonespoke2permnonp
+      resource_group_name: npspoke2-uksouth-spoke2permnonp-rg

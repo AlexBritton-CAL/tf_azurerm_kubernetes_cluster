@@ -24,11 +24,6 @@ variable "instance_name" {
   default = null
 }
 
-variable "layer_name" {
-  type    = string
-  default = null
-}
-
 variable "resource_prefix" {
   type    = string
   default = null
