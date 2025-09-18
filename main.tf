@@ -8,12 +8,14 @@ locals {
       default_node_pool               = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}))
       maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}))
       maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}))
-      workload_autoscaler_profile     = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))      
+      workload_autoscaler_profile     = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))
       tags                            = merge(var.global_config.global.tags, local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
     }
   )
 
   kubernetes_cluster_name = local.kubernetes_cluster.generate_name ? "${var.resource_prefix}-${var.instance_name}-aks" : var.name
+
+  acr_connected = try(local.kubernetes_cluster.container_registry.name, "") != "" ? 1 : 0
 }
 
 output "kubernetes_cluster" {
@@ -155,16 +157,18 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
     primary   = true
   }
   lifecycle {
-    ignore_changes = [ load_balancer_frontend_ip_configuration_ids ]
+    ignore_changes = [load_balancer_frontend_ip_configuration_ids]
   }
 }
 
 data "azurerm_container_registry" "this" {
+  count               = local.acr_connected
   name                = local.kubernetes_cluster.container_registry.name
   resource_group_name = local.kubernetes_cluster.container_registry.resource_group_name
 }
 
 resource "azurerm_role_assignment" "acr_pull" {
+  count                = local.acr_connected
   scope                = data.azurerm_container_registry.this.id
   role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.kubelet_identity.principal_id

@@ -1,7 +1,7 @@
 locals {
-  location = "uksouth"
+  location        = "uksouth"
   resource_prefix = "example"
-  instance_name = "exampleinstance"
+  instance_name   = "exampleinstance"
 
   layer_config_yaml = file("./config.yaml")
   layer_config      = yamldecode(local.layer_config_yaml)

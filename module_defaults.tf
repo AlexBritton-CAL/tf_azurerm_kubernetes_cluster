@@ -46,7 +46,7 @@ locals {
         vm_size                      = "Standard_B4s_v2"
         temporary_name_for_rotation  = "systemtemp"
         only_critical_addons_enabled = true
-        zones                        = ["1", "2", "3"]  # Deploy across availability zones
+        zones                        = ["1", "2", "3"] # Deploy across availability zones
         vnet_subnet_id               = "/subscriptions/${var.global_config.global.subscription_id}/resourceGroups/${var.global_config.global.spoke.network.virtual_network_resource_group_name}/providers/Microsoft.Network/virtualNetworks/${var.global_config.global.spoke.network.virtual_network_name}/subnets/aks-snet"
         node_public_ip_enabled       = false
 
@@ -92,7 +92,7 @@ locals {
       }
 
       private_link_service = {
-        name = "plink"
+        name      = "plink"
         subnet_id = "/subscriptions/${var.global_config.global.subscription_id}/resourceGroups/${var.global_config.global.spoke.network.virtual_network_resource_group_name}/providers/Microsoft.Network/virtualNetworks/${var.global_config.global.spoke.network.virtual_network_name}/subnets/app-snet"
       }
     }
