@@ -10,8 +10,8 @@ resource "azurerm_user_assigned_identity" "certmanager" {
 }
 
 data "azurerm_dns_zone" "public_dns_zone" {
-  name                = "calastonenp.com"
-  resource_group_name = var.config.public_dns_zone.rg_name
+  name                = var.global_config.global.public_dns_zone.name
+  resource_group_name = var.global_config.global.public_dns_zone.resource_group_name
   provider            = azurerm.public_dns
 }
 
