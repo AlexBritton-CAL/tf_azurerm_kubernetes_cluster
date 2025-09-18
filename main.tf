@@ -169,7 +169,7 @@ data "azurerm_container_registry" "this" {
 
 resource "azurerm_role_assignment" "acr_pull" {
   count                = local.acr_connected
-  scope                = data.azurerm_container_registry.this.id
+  scope                = data.azurerm_container_registry.this[1].id
   role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.kubelet_identity.principal_id
 }
