@@ -15,7 +15,7 @@ data "azurerm_dns_zone" "public_dns_zone" {
   provider            = azurerm.public_dns
 }
 
-data "azurerm_dns_zone" "private_dns_zone" {
+data "azurerm_private_dns_zone" "private_dns_zone" {
   name                = var.global_config.global.private_dns_zone.name
   resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
   provider            = azurerm.private_dns
