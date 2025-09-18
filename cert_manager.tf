@@ -15,20 +15,25 @@ data "azurerm_dns_zone" "public_dns_zone" {
   provider            = azurerm.public_dns
 }
 
-# # resource "azurerm_role_assignment" "certmanager_public_dns" {
-# #   for_each                         = local.aks
-# #   principal_id                     = azurerm_user_assigned_identity.certmanager[each.key].principal_id
-# #   role_definition_name             = "DNS Zone Contributor"
-# #   scope                            = data.azurerm_dns_zone.public_dns_zone.id
-# #   skip_service_principal_aad_check = true
-# # }
+data "azurerm_dns_zone" "private_dns_zone" {
+  name                = var.global_config.global.private_dns_zone.name
+  resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
+  provider            = azurerm.private_dns
+}
 
-# resource "azurerm_role_assignment" "certmanager_private_dns" {
-#   principal_id                     = azurerm_user_assigned_identity.certmanager.principal_id
-#   role_definition_name             = "Private DNS Zone Contributor"
-#   scope                            = data.azurerm_private_dns_zone.private_dns_zone.id
-#   skip_service_principal_aad_check = true
-# }
+resource "azurerm_role_assignment" "certmanager_public_dns" {
+  principal_id                     = azurerm_user_assigned_identity.certmanager.principal_id
+  role_definition_name             = "DNS Zone Contributor"
+  scope                            = data.azurerm_dns_zone.public_dns_zone.id
+  skip_service_principal_aad_check = true
+}
+
+resource "azurerm_role_assignment" "certmanager_private_dns" {
+  principal_id                     = azurerm_user_assigned_identity.certmanager.principal_id
+  role_definition_name             = "Private DNS Zone Contributor"
+  scope                            = data.azurerm_private_dns_zone.private_dns_zone.id
+  skip_service_principal_aad_check = true
+}
 
 resource "azurerm_federated_identity_credential" "certmanager" {
   name                = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.cert-manager-ns}-${local.cert-manager-sa_name}"
