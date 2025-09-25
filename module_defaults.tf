@@ -12,7 +12,7 @@ locals {
       }
 
       private_cluster_enabled    = true
-      private_dns_zone_id        = "/subscriptions/31b3d3dc-ce6e-4757-ad94-4111b7c4240e/resourceGroups/infcorp_azuks_private_dns_zones_rg/providers/Microsoft.Network/privateDnsZones/privatelink.uksouth.azmk8s.io" # UPDATE LATER - Provide your private DNS zone ID
+      private_dns_zone_id        = "/subscriptions/${var.global_config.global.privatelink_dns_zones.subscription_id}/resourceGroups/${var.global_config.global.privatelink_dns_zones.resource_group_name}/providers/Microsoft.Network/privateDnsZones/privatelink.uksouth.azmk8s.io" # UPDATE LATER - Provide your private DNS zone ID
       dns_prefix_private_cluster = replace("${var.resource_prefix}-${var.instance_name}-aks", "_", "-")
       dns_prefix                 = "publicaks01" # UPDATE LATER - Provide a unique DNS prefix for public cluster
 
@@ -94,7 +94,7 @@ locals {
 
       private_link_service = {
         name      = "plink"
-        subnet_id = "/subscriptions/${var.global_config.global.subscription_id}/resourceGroups/${var.global_config.global.spoke.network.virtual_network_resource_group_name}/providers/Microsoft.Network/virtualNetworks/${var.global_config.global.spoke.network.virtual_network_name}/subnets/app-snet"
+        subnet_id = "${local.cluster_vnet_subnet_id_prefix}app-snet"
       }
     }
   }
