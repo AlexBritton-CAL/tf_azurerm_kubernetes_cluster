@@ -122,6 +122,11 @@ resource "azurerm_kubernetes_cluster" "this" {
     keda_enabled                    = local.kubernetes_cluster.workload_autoscaler_profile.keda_enabled
     vertical_pod_autoscaler_enabled = local.kubernetes_cluster.workload_autoscaler_profile.vertical_pod_autoscaler_enabled
   }
+
+  lifecycle {
+   ignore_changes = [
+    service_mesh_profile.*.revisions
+   ]
 }
 
 module "azurerm_kubernetes_cluster_node_pool" {
