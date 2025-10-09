@@ -125,7 +125,6 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   lifecycle {
     ignore_changes = [
-      service_mesh_profile.*.revisions
     ]
   }
 }
