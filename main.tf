@@ -124,9 +124,10 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   lifecycle {
-   ignore_changes = [
-    service_mesh_profile.*.revisions
-   ]
+    ignore_changes = [
+      service_mesh_profile.*.revisions
+    ]
+  }
 }
 
 module "azurerm_kubernetes_cluster_node_pool" {
