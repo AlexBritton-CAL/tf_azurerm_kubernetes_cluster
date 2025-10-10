@@ -125,6 +125,8 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   lifecycle {
     ignore_changes = [
+      microsoft_defender,
+      azure_policy_enabled
     ]
   }
 }
