@@ -9,19 +9,19 @@ resource "azurerm_user_assigned_identity" "certmanager" {
   resource_group_name = var.resource_group_name
 }
 
-data "azurerm_dns_zone" "public_dns_zone" {
-  name                = var.global_config.global.public_dns_zone.name
-  resource_group_name = var.global_config.global.public_dns_zone.resource_group_name
-  provider            = azurerm.public_dns
-}
-
-data "azurerm_private_dns_zone" "private_dns_zone" {
-  name                = var.global_config.global.private_dns_zone.name
-  resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
-  provider            = azurerm.private_dns
-}
-
 # FIXME: Runners need to be able to assign these roles
+# data "azurerm_dns_zone" "public_dns_zone" {
+#   name                = var.global_config.global.public_dns_zone.name
+#   resource_group_name = var.global_config.global.public_dns_zone.resource_group_name
+#   provider            = azurerm.public_dns
+# }
+
+# data "azurerm_private_dns_zone" "private_dns_zone" {
+#   name                = var.global_config.global.private_dns_zone.name
+#   resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
+#   provider            = azurerm.private_dns
+# }
+
 # resource "azurerm_role_assignment" "certmanager_public_dns" {
 #   principal_id                     = azurerm_user_assigned_identity.certmanager.principal_id
 #   role_definition_name             = "DNS Zone Contributor"
