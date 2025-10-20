@@ -168,17 +168,12 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
   }
 }
 
-data "azurerm_private_dns_zone" "private_dns_zone" {
-  name                = var.global_config.global.private_dns_zone.name
-  resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
-  provider            = azurerm.private_dns
-}
-
 resource "azurerm_dns_a_record" "load_balancer_a_record" {
   name                = "*"
-  zone_name           = data.azurerm_private_dns_zone.private_dns_zone.name
-  resource_group_name = data.azurerm_private_dns_zone.private_dns_zone.resource_group_name
+  zone_name           = var.global_config.global.private_dns_zone.name
+  resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
   ttl                 = 300
   records = [azurerm_private_link_service.aks_lb_privatelink.nat_ip_configuration[0].private_ip_address]
+  provider = azurerm.private_dns
 }
 
