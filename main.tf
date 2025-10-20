@@ -171,7 +171,7 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
 data "azurerm_private_dns_zone" "private_dns_zone" {
   name                = var.global_config.global.private_dns_zone.name
   resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
-  provider            = azurerm.privatelink_dns
+  provider            = azurerm.private_dns
 }
 
 resource "azurerm_dns_a_record" "load_balancer_a_record" {
