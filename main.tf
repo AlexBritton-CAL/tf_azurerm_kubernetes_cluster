@@ -173,7 +173,7 @@ resource "azurerm_dns_a_record" "load_balancer_a_record" {
   zone_name           = var.global_config.global.private_dns_zone.name
   resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
   ttl                 = 300
-  records = [azurerm_private_link_service.aks_lb_privatelink.nat_ip_configuration[0].private_ip_address]
+  records = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].private_ip_address]
   provider = azurerm.private_dns
 }
 
