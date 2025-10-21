@@ -168,7 +168,7 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
   }
 }
 
-resource "azurerm_dns_a_record" "load_balancer_a_record" {
+resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
   name                = "*"
   zone_name           = var.global_config.global.private_dns_zone.name
   resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
