@@ -123,6 +123,11 @@ resource "azurerm_kubernetes_cluster" "this" {
     vertical_pod_autoscaler_enabled = local.kubernetes_cluster.workload_autoscaler_profile.vertical_pod_autoscaler_enabled
   }
 
+  key_vault_secrets_provider {
+    secret_rotation_enabled = local.kubernetes_cluster.key_vault_secrets_provider.secret_rotation_enabled
+    secret_rotation_interval = local.kubernetes_cluster.key_vault_secrets_provider.secret_rotation_interval
+  }
+  
   lifecycle {
     ignore_changes = [
       microsoft_defender,
