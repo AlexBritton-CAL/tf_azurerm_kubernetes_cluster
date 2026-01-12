@@ -6,8 +6,8 @@ locals {
     local.kubernetes_cluster_shallow,
     {
       default_node_pool               = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}))
-      maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}))
-      maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.maintenance_window_node_os, {}), try(var.config.maintenance_window_node_os, {}))
+      maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}), try(var.maintenance_window_auto_upgrade, {}))
+      maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}), try(var.maintenance_window_node_os, {}))
       workload_autoscaler_profile     = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))
       tags                            = merge(try(var.global_config.global.tags, {}), local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
     }
@@ -28,8 +28,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   name                   = local.kubernetes_cluster_name
   location               = try(local.kubernetes_cluster.location, var.global_config.global.location)
   resource_group_name    = var.resource_group_name
-  node_resource_group    = local.kubernetes_cluster.node_resource_group
-  oidc_issuer_enabled    = local.kubernetes_cluster.oidc_issuer_enabled
+  node_resource_group    = try(var.node_resource_group_name, local.kubernetes_cluster.node_resource_group)
+  oidc_issuer_enabled    = try(var.oidc_issuer_enabled, local.kubernetes_cluster.oidc_issuer_enabled)
   local_account_disabled = local.kubernetes_cluster.local_account_disabled
 
   azure_active_directory_role_based_access_control {
