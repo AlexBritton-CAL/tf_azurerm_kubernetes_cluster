@@ -28,3 +28,23 @@ variable "resource_prefix" {
   type    = string
   default = null
 }
+
+variable "maintenance_window_node_os" {
+  type = object({
+    frequency    = string
+    interval     = string
+    duration     = number
+    day_of_week  = optional(string)
+    day_of_month = optional(number)
+    week_index   = optional(string)
+    start_time   = optional(string)
+    utc_offset   = optional(string)
+    start_date   = optional(string)
+    not_allowed = optional(object({
+      start = string
+      end   = string
+    }))
+  })
+  default     = null
+  description = "values for maintenance window node os"
+}
