@@ -197,8 +197,8 @@ variable "default_node_pool" {
   description = "Required. The default node pool for the Kubernetes cluster."
   default     = null
 
-  validation {
-    # condition     = !var.default_node_pool.auto_scaling_enabled || var.default_node_pool.type == "VirtualMachineScaleSets"
-    # error_message = "Autoscaling on default node pools is only supported when the Kubernetes Cluster is using Virtual Machine Scale Sets type nodes."
-  }
+  # validation {
+  #   condition     = !var.default_node_pool.auto_scaling_enabled || var.default_node_pool.type == "VirtualMachineScaleSets"
+  #   error_message = "Autoscaling on default node pools is only supported when the Kubernetes Cluster is using Virtual Machine Scale Sets type nodes."
+  # }
 }
