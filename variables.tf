@@ -214,4 +214,5 @@ variable "network_profile" {
     network_policy      = optional(string)
   })
   description = "The network profile for the Kubernetes cluster."
+  default     = null
 }
