@@ -26,7 +26,7 @@ data "azurerm_client_config" "this" {}
 
 resource "azurerm_kubernetes_cluster" "this" {
   name                   = local.kubernetes_cluster_name
-  location               = try(var.location, local.kubernetes_cluster.location, var.global_config.global.location)
+  location               = coalesce(try(var.location, null), local.kubernetes_cluster.location, var.global_config.global.location)
   resource_group_name    = var.resource_group_name
   node_resource_group    = try(var.node_resource_group_name, local.kubernetes_cluster.node_resource_group)
   oidc_issuer_enabled    = try(var.oidc_issuer_enabled, local.kubernetes_cluster.oidc_issuer_enabled)
