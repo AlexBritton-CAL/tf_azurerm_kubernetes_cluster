@@ -1,6 +1,12 @@
 variable "name" {
-  description = "The name of the AKS cluster"
   type        = string
+  description = "The name of this resource."
+  nullable    = false
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9]([a-zA-Z0-9\\-_]{0,61}[a-zA-Z0-9])?$", var.name))
+    error_message = "The name must be between 1 and 63 characters long and can only contain lowercase letters, numbers and hyphens."
+  }
 }
 
 variable "config" {
@@ -14,9 +20,9 @@ variable "global_config" {
 }
 
 variable "resource_group_name" {
-  description = "The name of the resource group for the AKS cluster"
   type        = string
-  default     = null
+  description = "The resource group where the resources will be deployed."
+  nullable    = false
 }
 
 variable "instance_name" {
@@ -27,6 +33,12 @@ variable "instance_name" {
 variable "resource_prefix" {
   type    = string
   default = null
+}
+
+variable "location" {
+  type        = string
+  description = "Azure region where the resource should be deployed."
+  nullable    = false
 }
 
 variable "node_resource_group_name" {
