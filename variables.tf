@@ -37,8 +37,8 @@ variable "resource_prefix" {
 
 variable "location" {
   type        = string
+  default     = null
   description = "Azure region where the resource should be deployed."
-  nullable    = false
 }
 
 variable "node_resource_group_name" {
@@ -195,7 +195,7 @@ variable "default_node_pool" {
 
   })
   description = "Required. The default node pool for the Kubernetes cluster."
-  nullable    = false
+  default     = null
 
   validation {
     condition     = !var.default_node_pool.auto_scaling_enabled || var.default_node_pool.type == "VirtualMachineScaleSets"
