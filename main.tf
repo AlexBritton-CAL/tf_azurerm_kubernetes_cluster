@@ -29,7 +29,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   location               = coalesce(try(var.location, null), try(local.kubernetes_cluster.location, null), var.global_config.global.location)
   resource_group_name    = var.resource_group_name
   node_resource_group    = coalesce(try(var.node_resource_group_name, null), local.kubernetes_cluster.node_resource_group)
-  oidc_issuer_enabled    = coalesce(try(var.oidc_issuer_enabled, null), local.kubernetes_cluster.oidc_issuer_enabled)W
+  oidc_issuer_enabled    = coalesce(try(var.oidc_issuer_enabled, null), local.kubernetes_cluster.oidc_issuer_enabled)
   local_account_disabled = local.kubernetes_cluster.local_account_disabled
 
   azure_active_directory_role_based_access_control {
