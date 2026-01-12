@@ -202,3 +202,16 @@ variable "default_node_pool" {
   #   error_message = "Autoscaling on default node pools is only supported when the Kubernetes Cluster is using Virtual Machine Scale Sets type nodes."
   # }
 }
+
+variable "network_profile" {
+  type = object({
+    network_plugin      = string
+    network_plugin_mode = optional(string)
+    service_cidr        = optional(string)
+    pod_cidr            = optional(string)
+    dns_service_ip      = optional(string)
+    network_data_plane  = optional(string)
+    network_policy      = optional(string)
+  })
+  description = "The network profile for the Kubernetes cluster."
+}
