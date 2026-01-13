@@ -101,21 +101,21 @@ resource "azurerm_kubernetes_cluster" "this" {
   tags               = merge(local.kube_default.tags, var.tags)
 
   maintenance_window_auto_upgrade {
-    frequency   = coalesce(try(local.config.maintenance_window_auto_upgrade.frequency, null), var.maintenance_window_auto_upgrade.frequency, local.kube_default.maintenance_window_auto_upgrade.frequency)
-    interval    = coalesce(try(local.config.maintenance_window_auto_upgrade.interval, null), var.maintenance_window_auto_upgrade.interval, local.kube_default.maintenance_window_auto_upgrade.interval)
-    duration    = coalesce(try(local.config.maintenance_window_auto_upgrade.duration, null), var.maintenance_window_auto_upgrade.duration, local.kube_default.maintenance_window_auto_upgrade.duration)
-    day_of_week = coalesce(try(local.config.maintenance_window_auto_upgrade.day_of_week, null), var.maintenance_window_auto_upgrade.day_of_week, local.kube_default.maintenance_window_auto_upgrade.day_of_week)
-    start_time  = coalesce(try(local.config.maintenance_window_auto_upgrade.start_time, null), var.maintenance_window_auto_upgrade.start_time, local.kube_default.maintenance_window_auto_upgrade.start_time)
-    utc_offset  = coalesce(try(local.config.maintenance_window_auto_upgrade.utc_offset, null), var.maintenance_window_auto_upgrade.utc_offset, local.kube_default.maintenance_window_auto_upgrade.utc_offset)
+    frequency   = coalesce(try(var.config.maintenance_window_auto_upgrade.frequency, null), var.maintenance_window_auto_upgrade.frequency, local.kube_default.maintenance_window_auto_upgrade.frequency)
+    interval    = coalesce(try(var.config.maintenance_window_auto_upgrade.interval, null), var.maintenance_window_auto_upgrade.interval, local.kube_default.maintenance_window_auto_upgrade.interval)
+    duration    = coalesce(try(var.config.maintenance_window_auto_upgrade.duration, null), var.maintenance_window_auto_upgrade.duration, local.kube_default.maintenance_window_auto_upgrade.duration)
+    day_of_week = coalesce(try(var.config.maintenance_window_auto_upgrade.day_of_week, null), var.maintenance_window_auto_upgrade.day_of_week, local.kube_default.maintenance_window_auto_upgrade.day_of_week)
+    start_time  = coalesce(try(var.config.maintenance_window_auto_upgrade.start_time, null), var.maintenance_window_auto_upgrade.start_time, local.kube_default.maintenance_window_auto_upgrade.start_time)
+    utc_offset  = coalesce(try(var.config.maintenance_window_auto_upgrade.utc_offset, null), var.maintenance_window_auto_upgrade.utc_offset, local.kube_default.maintenance_window_auto_upgrade.utc_offset)
   }
 
   maintenance_window_node_os {
-    frequency   = coalesce(try(local.config.maintenance_window_node_os.frequency, null), var.maintenance_window_node_os.frequency, local.kube_default.maintenance_window_node_os.frequency)
-    interval    = coalesce(try(local.config.maintenance_window_node_os.interval, null), var.maintenance_window_node_os.interval, local.kube_default.maintenance_window_node_os.interval)
-    duration    = coalesce(try(local.config.maintenance_window_node_os.duration, null), var.maintenance_window_node_os.duration, local.kube_default.maintenance_window_node_os.duration)
-    day_of_week = coalesce(try(local.config.maintenance_window_node_os.day_of_week, null), var.maintenance_window_node_os.day_of_week, local.kube_default.maintenance_window_node_os.day_of_week)
-    start_time  = coalesce(try(local.config.maintenance_window_node_os.start_time, null), var.maintenance_window_node_os.start_time, local.kube_default.maintenance_window_node_os.start_time)
-    utc_offset  = coalesce(try(local.config.maintenance_window_node_os.utc_offset, null), var.maintenance_window_node_os.utc_offset, local.kube_default.maintenance_window_node_os.utc_offset)
+    frequency   = coalesce(try(var.config.maintenance_window_node_os.frequency, null), var.maintenance_window_node_os.frequency, local.kube_default.maintenance_window_node_os.frequency)
+    interval    = coalesce(try(var.config.maintenance_window_node_os.interval, null), var.maintenance_window_node_os.interval, local.kube_default.maintenance_window_node_os.interval)
+    duration    = coalesce(try(var.config.maintenance_window_node_os.duration, null), var.maintenance_window_node_os.duration, local.kube_default.maintenance_window_node_os.duration)
+    day_of_week = coalesce(try(var.config.maintenance_window_node_os.day_of_week, null), var.maintenance_window_node_os.day_of_week, local.kube_default.maintenance_window_node_os.day_of_week)
+    start_time  = coalesce(try(var.config.maintenance_window_node_os.start_time, null), var.maintenance_window_node_os.start_time, local.kube_default.maintenance_window_node_os.start_time)
+    utc_offset  = coalesce(try(var.config.maintenance_window_node_os.utc_offset, null), var.maintenance_window_node_os.utc_offset, local.kube_default.maintenance_window_node_os.utc_offset)
   }
   workload_autoscaler_profile {
     keda_enabled                    = coalesce(try(var.config.workload_autoscaler_profile.keda_enabled, null), var.workload_autoscaler_profile.keda_enabled, local.kube_default.workload_autoscaler_profile.keda_enabled)
