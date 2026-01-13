@@ -19,7 +19,7 @@ locals {
 
   kubernetes_cluster_name = coalesce(try(local.kube_default.generate_name, null), try(var.config.generate_name, null), var.generate_name) ? "${var.resource_prefix}-${var.instance_name}-aks" : var.name
 
-  acr_connected = try(local.kube_default.container_registry.name, "") != "" ? 1 : 0
+  acr_connected = try(var.config.container_registry.name, local.config.container_registry.name,  "") != "" ? 1 : 0
 }
 
 data "azurerm_client_config" "this" {}
