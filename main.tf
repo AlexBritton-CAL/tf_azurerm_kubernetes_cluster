@@ -47,13 +47,13 @@ resource "azurerm_kubernetes_cluster" "this" {
   workload_identity_enabled = local.kubernetes_cluster.workload_identity_enabled
 
   network_profile {
-    network_plugin      = local.kubernetes_cluster.network_profile.network_plugin
-    network_plugin_mode = local.kubernetes_cluster.network_profile.network_plugin_mode
-    service_cidr        = local.kubernetes_cluster.network_profile.service_cidr
-    pod_cidr            = local.kubernetes_cluster.network_profile.pod_cidr
-    dns_service_ip      = local.kubernetes_cluster.network_profile.dns_service_ip
-    network_data_plane  = local.kubernetes_cluster.network_profile.network_data_plane
-    network_policy      = local.kubernetes_cluster.network_profile.network_policy
+    network_plugin      = coalesce(try(var.network_profile.network_plugin, null), local.kubernetes_cluster.network_profile.network_plugin)
+    network_plugin_mode = coalesce(try(var.network_profile.network_plugin_mode, null), local.kubernetes_cluster.network_profile.network_plugin_mode)
+    service_cidr        = coalesce(try(var.network_profile.service_cidr, null), local.kubernetes_cluster.network_profile.service_cidr)
+    pod_cidr            = coalesce(try(var.network_profile.pod_cidr, null), local.kubernetes_cluster.network_profile.pod_cidr)
+    dns_service_ip      = coalesce(try(var.network_profile.dns_service_ip, null), local.kubernetes_cluster.network_profile.dns_service_ip)
+    network_data_plane  = coalesce(try(var.network_profile.network_data_plane, null), local.kubernetes_cluster.network_profile.network_data_plane)
+    network_policy      = coalesce(try(var.network_profile.network_policy, null), local.kubernetes_cluster.network_profile.network_policy)
   }
 
   dynamic "service_mesh_profile" {
