@@ -28,24 +28,23 @@ resource "azurerm_kubernetes_cluster" "this" {
   name                   = local.kubernetes_cluster_name
   location               = coalesce(var.location, null, try(local.kube_default.location, null), var.global_config.global.location)
   resource_group_name    = var.resource_group_name
-  node_resource_group    = coalesce(local.kube_default.node_resource_group, var.node_resource_group_name, null)
-  oidc_issuer_enabled    = coalesce(local.kube_default.oidc_issuer_enabled, var.oidc_issuer_enabled, null)
-  local_account_disabled = local.kube_default.local_account_disabled
-
-  azure_active_directory_role_based_access_control {
-    azure_rbac_enabled = coalesce(local.kube_default.azure_active_directory_role_based_access_control.azure_rbac_enabled, try(var.config.azure_active_directory_role_based_access_control.azure_rbac_enabled, null), var.azure_active_directory_role_based_access_control.azure_rbac_enabled)
-    tenant_id          = coalesce(local.kube_default.azure_active_directory_role_based_access_control.tenant_id, try(var.config.azure_active_directory_role_based_access_control.tenant_id, null), var.azure_active_directory_role_based_access_control.tenant_id)
-  }
+  node_resource_group    = coalesce(local.kube_default.node_resource_group, var.node_resource_group_name)
+  oidc_issuer_enabled    = coalesce(local.kube_default.oidc_issuer_enabled, var.oidc_issuer_enabled)
+  local_account_disabled = coalesce(local.kube_default.local_account_disabled, var.local_account_disabled)
 
   private_cluster_enabled    = coalesce(local.kube_default.private_cluster_enabled, try(var.private_cluster_enabled, null))
   private_dns_zone_id        = local.kube_default.private_dns_zone_id
   dns_prefix_private_cluster = local.kube_default.dns_prefix_private_cluster
   dns_prefix                 = local.kube_default.private_cluster_enabled ? null : local.kube_default.dns_prefix
 
-  automatic_upgrade_channel = local.kube_default.automatic_upgrade_channel
+  automatic_upgrade_channel = coalesce(try(var.config.automatic_upgrade_channel, null), var.automatic_upgrade_channel, local.kube_default.automatic_upgrade_channel)
+  workload_identity_enabled = coalesce(try(var.config.workload_identity_enabled, null), local.kube_default.workload_identity_enabled)
 
-  workload_identity_enabled = local.kube_default.workload_identity_enabled
-
+  azure_active_directory_role_based_access_control {
+    azure_rbac_enabled = coalesce(try(var.config.azure_active_directory_role_based_access_control.azure_rbac_enabled, null), var.azure_active_directory_role_based_access_control.azure_rbac_enabled, local.kube_default.azure_active_directory_role_based_access_control.azure_rbac_enabled)
+    tenant_id          = coalesce(try(var.config.azure_active_directory_role_based_access_control.tenant_id, null), var.azure_active_directory_role_based_access_control.tenant_id, local.kube_default.azure_active_directory_role_based_access_control.tenant_id)
+  }
+  
   network_profile {
     network_plugin      = coalesce(try(var.config.network_profile.network_plugin, null), var.network_profile.network_plugin, local.kube_default.network_profile.network_plugin)
     network_plugin_mode = coalesce(try(var.config.network_profile.network_plugin_mode, null), var.network_profile.network_plugin_mode, local.kube_default.network_profile.network_plugin_mode)

@@ -65,6 +65,18 @@ variable "oidc_issuer_enabled" {
   description = "Whether or not the OIDC issuer is enabled for the Kubernetes cluster."
 }
 
+variable "automatic_upgrade_channel" {
+  type        = string
+  default     = null
+  description = "The automatic upgrade channel for the Kubernetes cluster."
+}
+
+variable "local_account_disabled" {
+  type        = bool
+  default     = null
+  description = "Whether or not the local account is disabled for the Kubernetes cluster."
+}
+
 variable "maintenance_window_node_os" {
   type = object({
     frequency   = optional(string)
