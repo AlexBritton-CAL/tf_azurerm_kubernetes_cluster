@@ -220,7 +220,7 @@ variable "network_profile" {
     network_policy      = optional(string, "cilium")
   })
   description = "The network profile for the Kubernetes cluster."
-  nullable = true
+  default = {}
 }
 
 variable "service_mesh_profile" {
