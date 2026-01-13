@@ -109,6 +109,7 @@ variable "default_node_pool" {
     upgrade_settings = optional(object({
       max_surge = optional(string, "25%")
     }))
+    tags = optional(map(string), {})
 
   })
   description = "Required. The default node pool for the Kubernetes cluster."
