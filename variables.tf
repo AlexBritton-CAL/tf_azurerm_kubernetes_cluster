@@ -107,7 +107,7 @@ variable "default_node_pool" {
     node_public_ip_enabled       = optional(bool, false)
 
     upgrade_settings = object({
-      max_surge = optional(string, "25%")
+      max_surge = optional(string, "10%")
     })
     tags = optional(map(string), {})
 
