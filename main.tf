@@ -136,7 +136,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 }
 
 module "azurerm_kubernetes_cluster_node_pool" {
-  for_each                      = local.kube_default.node_pools
+  for_each                      = try(local.kube_default.node_pools, var.config.node_pools, [])
   source                        = "git::https://github.com/AlexBritton-CAL/ts_azurerm_kubernetes_cluster_node_pool.git"
   name                          = each.key
   config                        = each.value
