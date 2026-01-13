@@ -42,9 +42,9 @@ resource "azurerm_kubernetes_cluster" "this" {
   dns_prefix_private_cluster = local.kubernetes_cluster.dns_prefix_private_cluster
   dns_prefix                 = local.kubernetes_cluster.private_cluster_enabled ? null : local.kubernetes_cluster.dns_prefix
 
-  automatic_upgrade_channel = local.kubernetes_cluster.automatic_upgrade_channel
+  automatic_upgrade_channel = local.kube_default.automatic_upgrade_channel
 
-  workload_identity_enabled = local.kubernetes_cluster.workload_identity_enabled
+  workload_identity_enabled = local.kube_default.workload_identity_enabled
 
   network_profile {
     network_plugin      = coalesce(local.kubernetes_cluster.network_profile.network_plugin, var.network_profile.network_plugin)
