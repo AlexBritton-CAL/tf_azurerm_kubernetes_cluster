@@ -6,7 +6,7 @@ locals {
     local.kubernetes_cluster_shallow,
     {
       default_node_pool               = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}), try(var.default_node_pool, {}))
-      network_profile                 = merge(local.module_defaults.kubernetes_cluster.network_profile, try(var.config.network_profile, {}), try)
+      network_profile                 = merge(local.module_defaults.kubernetes_cluster.network_profile, try(var.config.network_profile, {}), try(var.network_profile, {}))
       maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}), try(var.maintenance_window_auto_upgrade, {}))
       maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}), try(var.maintenance_window_node_os, {}))
       workload_autoscaler_profile     = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))
