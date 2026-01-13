@@ -71,15 +71,8 @@ variable "maintenance_window_node_os" {
     interval    = optional(string)
     duration    = optional(number)
     day_of_week = optional(string)
-    # day_of_month = optional(number)
-    # week_index   = optional(string)
     start_time = optional(string)
     utc_offset = optional(string)
-    # start_date   = optional(string)
-    # not_allowed = optional(object({
-    # start = string
-    # end   = string
-    # }))
   })
   default     = null
   description = "values for maintenance window node os"
@@ -173,7 +166,7 @@ variable "key_vault_secrets_provider" {
     secret_rotation_enabled  = optional(bool)
     secret_rotation_interval = optional(string)
   })
-  default     = null
+  default     = {}
   description = "The key vault secrets provider for the Kubernetes cluster. Either rotation enabled or rotation interval must be specified."
 }
 
