@@ -26,34 +26,34 @@ data "azurerm_client_config" "this" {}
 
 resource "azurerm_kubernetes_cluster" "this" {
   name                   = local.kubernetes_cluster_name
-  location               = coalesce(var.location, null, try(local.kubernetes_cluster.location, null), var.global_config.global.location)
+  location               = coalesce(var.location, null, try(local.kube_default.location, null), var.global_config.global.location)
   resource_group_name    = var.resource_group_name
-  node_resource_group    = coalesce(local.kubernetes_cluster.node_resource_group, var.node_resource_group_name, null)
-  oidc_issuer_enabled    = coalesce(local.kubernetes_cluster.oidc_issuer_enabled, var.oidc_issuer_enabled, null)
-  local_account_disabled = local.kubernetes_cluster.local_account_disabled
+  node_resource_group    = coalesce(local.kube_default.node_resource_group, var.node_resource_group_name, null)
+  oidc_issuer_enabled    = coalesce(local.kube_default.oidc_issuer_enabled, var.oidc_issuer_enabled, null)
+  local_account_disabled = local.kube_default.local_account_disabled
 
   azure_active_directory_role_based_access_control {
-    azure_rbac_enabled = local.kubernetes_cluster.azure_active_directory_role_based_access_control.azure_rbac_enabled
-    tenant_id          = local.kubernetes_cluster.azure_active_directory_role_based_access_control.tenant_id
+    azure_rbac_enabled = local.kube_default.azure_active_directory_role_based_access_control.azure_rbac_enabled
+    tenant_id          = local.kube_default.azure_active_directory_role_based_access_control.tenant_id
   }
 
-  private_cluster_enabled    = coalesce(local.kubernetes_cluster.private_cluster_enabled, try(var.private_cluster_enabled, null))
-  private_dns_zone_id        = local.kubernetes_cluster.private_dns_zone_id
-  dns_prefix_private_cluster = local.kubernetes_cluster.dns_prefix_private_cluster
-  dns_prefix                 = local.kubernetes_cluster.private_cluster_enabled ? null : local.kubernetes_cluster.dns_prefix
+  private_cluster_enabled    = coalesce(local.kube_default.private_cluster_enabled, try(var.private_cluster_enabled, null))
+  private_dns_zone_id        = local.kube_default.private_dns_zone_id
+  dns_prefix_private_cluster = local.kube_default.dns_prefix_private_cluster
+  dns_prefix                 = local.kube_default.private_cluster_enabled ? null : local.kube_default.dns_prefix
 
   automatic_upgrade_channel = local.kube_default.automatic_upgrade_channel
 
   workload_identity_enabled = local.kube_default.workload_identity_enabled
 
   network_profile {
-    network_plugin      = coalesce(local.kubernetes_cluster.network_profile.network_plugin, var.network_profile.network_plugin)
-    network_plugin_mode = coalesce(local.kubernetes_cluster.network_profile.network_plugin_mode, var.network_profile.network_plugin_mode)
-    service_cidr        = coalesce(local.kubernetes_cluster.network_profile.service_cidr, var.network_profile.service_cidr)
-    pod_cidr            = coalesce(local.kubernetes_cluster.network_profile.pod_cidr, var.network_profile.pod_cidr)
-    dns_service_ip      = coalesce(local.kubernetes_cluster.network_profile.dns_service_ip, var.network_profile.dns_service_ip)
-    network_data_plane  = coalesce(local.kubernetes_cluster.network_profile.network_data_plane, var.network_profile.network_data_plane)
-    network_policy      = coalesce(local.kubernetes_cluster.network_profile.network_policy, var.network_profile.network_policy)
+    network_plugin      = coalesce(local.kube_default.network_profile.network_plugin, var.network_profile.network_plugin)
+    network_plugin_mode = coalesce(local.kube_default.network_profile.network_plugin_mode, var.network_profile.network_plugin_mode)
+    service_cidr        = coalesce(local.kube_default.network_profile.service_cidr, var.network_profile.service_cidr)
+    pod_cidr            = coalesce(local.kube_default.network_profile.pod_cidr, var.network_profile.pod_cidr)
+    dns_service_ip      = coalesce(local.kube_default.network_profile.dns_service_ip, var.network_profile.dns_service_ip)
+    network_data_plane  = coalesce(local.kube_default.network_profile.network_data_plane, var.network_profile.network_data_plane)
+    network_policy      = coalesce(local.kube_default.network_profile.network_policy, var.network_profile.network_policy)
   }
 
   dynamic "service_mesh_profile" {
