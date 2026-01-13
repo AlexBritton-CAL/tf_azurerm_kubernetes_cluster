@@ -80,15 +80,15 @@ variable "maintenance_window_node_os" {
 }
 
 variable "maintenance_window_auto_upgrade" {
-  type = optional(object({
+  type = object({
     frequency   = optional(string, "Weekly")
     interval    = optional(string, "1")
     duration    = optional(number, 4)
     day_of_week = optional(string, "Saturday")
     start_time = optional(string, "02:00")
     utc_offset = optional(string, "+00:00")
-  }))
-  # default     = null
+  })
+  default     = {}
   description = "values for maintenance window auto upgrade"
 }
 
