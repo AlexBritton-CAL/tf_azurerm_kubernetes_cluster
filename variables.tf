@@ -101,17 +101,17 @@ variable "maintenance_window_auto_upgrade" {
 
 variable "default_node_pool" {
   type = object({
-    name                         = optional(string)
-    min_count                    = optional(number)
-    node_count                   = optional(number)
-    max_count                    = optional(number)
-    auto_scaling_enabled         = optional(bool, false)
-    vm_size                      = optional(string)
-    temporary_name_for_rotation  = optional(string)
-    only_critical_addons_enabled = optional(string)
-    zones                        = optional(list(string))
-    vnet_subnet_id               = optional(string)
-    node_public_ip_enabled       = optional(bool)
+    name                         = optional(string, "systempool")
+    min_count                    = optional(number, 2)
+    node_count                   = optional(number, 2)
+    max_count                    = optional(number, 5)
+    auto_scaling_enabled         = optional(bool, true)
+    vm_size                      = optional(string, "Standard_B4s_v2")
+    temporary_name_for_rotation  = optional(string, "systemtemp")
+    only_critical_addons_enabled = optional(string, true)
+    zones                        = optional(list(string), ["1", "2", "3"])
+    vnet_subnet_id               = optional(string, "${local.cluster_vnet_subnet_id_prefix}aks-snet")
+    node_public_ip_enabled       = optional(bool, false)
 
     # capacity_reservation_group_id = optional(string)
     # host_encryption_enabled       = optional(bool)
@@ -196,7 +196,7 @@ variable "default_node_pool" {
     upgrade_settings = optional(object({
       # drain_timeout_in_minutes      = optional(number)
       # node_soak_duration_in_minutes = optional(number)
-      max_surge = string
+      max_surge = optional(string, "25%")
     }))
 
   })
