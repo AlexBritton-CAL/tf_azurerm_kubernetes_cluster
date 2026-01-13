@@ -110,7 +110,7 @@ variable "default_node_pool" {
     temporary_name_for_rotation  = optional(string, "systemtemp")
     only_critical_addons_enabled = optional(string, true)
     zones                        = optional(list(string), ["1", "2", "3"])
-    vnet_subnet_id               = optional(string, "${local.cluster_vnet_subnet_id_prefix}aks-snet")
+    vnet_subnet_id               = optional(string)
     node_public_ip_enabled       = optional(bool, false)
 
     # capacity_reservation_group_id = optional(string)
