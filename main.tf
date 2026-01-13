@@ -37,7 +37,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     tenant_id          = local.kubernetes_cluster.azure_active_directory_role_based_access_control.tenant_id
   }
 
-  private_cluster_enabled    = coalesce(try(var.private_cluster_enabled, null), local.kubernetes_cluster.private_cluster_enabled)
+  private_cluster_enabled    = coalesce(local.kubernetes_cluster.private_cluster_enabled, try(var.private_cluster_enabled, null))
   private_dns_zone_id        = local.kubernetes_cluster.private_dns_zone_id
   dns_prefix_private_cluster = local.kubernetes_cluster.dns_prefix_private_cluster
   dns_prefix                 = local.kubernetes_cluster.private_cluster_enabled ? null : local.kubernetes_cluster.dns_prefix
@@ -47,13 +47,13 @@ resource "azurerm_kubernetes_cluster" "this" {
   workload_identity_enabled = local.kubernetes_cluster.workload_identity_enabled
 
   network_profile {
-    network_plugin      = coalesce(try(var.network_profile.network_plugin, null), local.kubernetes_cluster.network_profile.network_plugin)
-    network_plugin_mode = coalesce(try(var.network_profile.network_plugin_mode, null), local.kubernetes_cluster.network_profile.network_plugin_mode)
-    service_cidr        = coalesce(try(var.network_profile.service_cidr, null), local.kubernetes_cluster.network_profile.service_cidr)
-    pod_cidr            = coalesce(try(var.network_profile.pod_cidr, null), local.kubernetes_cluster.network_profile.pod_cidr)
-    dns_service_ip      = coalesce(try(var.network_profile.dns_service_ip, null), local.kubernetes_cluster.network_profile.dns_service_ip)
-    network_data_plane  = coalesce(try(var.network_profile.network_data_plane, null), local.kubernetes_cluster.network_profile.network_data_plane)
-    network_policy      = coalesce(try(var.network_profile.network_policy, null), local.kubernetes_cluster.network_profile.network_policy)
+    network_plugin      = coalesce(local.kubernetes_cluster.network_profile.network_plugin, try(var.network_profile.network_plugin, null))
+    network_plugin_mode = coalesce(local.kubernetes_cluster.network_profile.network_plugin_mode, try(var.network_profile.network_plugin_mode, null))
+    service_cidr        = coalesce(local.kubernetes_cluster.network_profile.service_cidr, try(var.network_profile.service_cidr, null))
+    pod_cidr            = coalesce(local.kubernetes_cluster.network_profile.pod_cidr, try(var.network_profile.pod_cidr, null))
+    dns_service_ip      = coalesce(local.kubernetes_cluster.network_profile.dns_service_ip, try(var.network_profile.dns_service_ip, null))
+    network_data_plane  = coalesce(local.kubernetes_cluster.network_profile.network_data_plane, try(var.network_profile.network_data_plane, null))
+    network_policy      = coalesce(local.kubernetes_cluster.network_profile.network_policy, try(var.network_profile.network_policy, null))
   }
 
   dynamic "service_mesh_profile" {

@@ -49,7 +49,7 @@ variable "node_resource_group_name" {
 
 variable "private_cluster_enabled" {
   type        = bool
-  default     = false
+  default     = true
   description = "Whether or not the cluster is a private cluster."
 }
 
