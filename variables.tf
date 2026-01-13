@@ -106,9 +106,9 @@ variable "default_node_pool" {
     vnet_subnet_id               = optional(string)
     node_public_ip_enabled       = optional(bool, false)
 
-    upgrade_settings = (object({
+    upgrade_settings = object({
       max_surge = optional(string, "25%")
-    }))
+    })
     tags = optional(map(string), {})
 
   })
