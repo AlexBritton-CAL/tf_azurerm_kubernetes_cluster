@@ -101,12 +101,12 @@ variable "maintenance_window_auto_upgrade" {
 
 variable "default_node_pool" {
   type = object({
-    name                          = string
+    name                          = optional(string)
     min_count                     = optional(number)
     node_count                    = optional(number)
     max_count                     = optional(number)
     auto_scaling_enabled          = optional(bool, false)
-    vm_size                       = string
+    vm_size                       = optional(string)
     temporary_name_for_rotation   = optional(string)
     only_critical_addons_enabled  = optional(string)
     zones                         = optional(list(string))
@@ -211,7 +211,7 @@ variable "default_node_pool" {
 
 variable "network_profile" {
   type = object({
-    network_plugin      = string
+    network_plugin      = optional(string)
     network_plugin_mode = optional(string)
     service_cidr        = optional(string)
     pod_cidr            = optional(string)
@@ -225,7 +225,7 @@ variable "network_profile" {
 
 variable "service_mesh_profile" {
   type = object({
-    mode                             = string
+    mode                             = optional(string)
     internal_ingress_gateway_enabled = optional(bool)
     external_ingress_gateway_enabled = optional(bool)
     revisions                        = optional(list(string), [])
@@ -237,6 +237,6 @@ variable "service_mesh_profile" {
     #   key_object_name        = string
     # }))
   })
-  default     = null
   description = "The service mesh profile for the Kubernetes cluster."
+  default     = null
 }
