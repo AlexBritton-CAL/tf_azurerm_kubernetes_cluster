@@ -5,12 +5,13 @@ locals {
   kubernetes_cluster = merge(
     local.kubernetes_cluster_shallow,
     {
-      default_node_pool               = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}), try(var.default_node_pool, {}))
-      network_profile                 = merge(local.module_defaults.kubernetes_cluster.network_profile, try(var.config.network_profile, {}), try(var.network_profile, {}))
-      maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}), try(var.maintenance_window_auto_upgrade, {}))
-      maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}), try(var.maintenance_window_node_os, {}))
-      workload_autoscaler_profile     = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))
-      tags                            = merge(try(var.global_config.global.tags, {}), local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
+      default_node_pool                  = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}), try(var.default_node_pool, {}))
+      default_node_pool.upgrade_settings = merge(local.module_defaults.kubernetes_cluster.default_node_pool.upgrade_settings, try(var.config.default_node_pool.upgrade_settings, {}), try(var.default_node_pool.upgrade_settings, {}))
+      network_profile                    = merge(local.module_defaults.kubernetes_cluster.network_profile, try(var.config.network_profile, {}), try(var.network_profile, {}))
+      maintenance_window_auto_upgrade    = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}), try(var.maintenance_window_auto_upgrade, {}))
+      maintenance_window_node_os         = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}), try(var.maintenance_window_node_os, {}))
+      workload_autoscaler_profile        = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))
+      tags                               = merge(try(var.global_config.global.tags, {}), local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
     }
   )
 
@@ -119,10 +120,10 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   key_vault_secrets_provider {
-    secret_rotation_enabled = try(local.kubernetes_cluster.key_vault_secrets_provider.secret_rotation_enabled, null)
+    secret_rotation_enabled  = try(local.kubernetes_cluster.key_vault_secrets_provider.secret_rotation_enabled, null)
     secret_rotation_interval = try(local.kubernetes_cluster.key_vault_secrets_provider.secret_rotation_interval, null)
   }
-  
+
   lifecycle {
     ignore_changes = [
       microsoft_defender,
@@ -173,7 +174,7 @@ resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
   zone_name           = var.global_config.global.private_dns_zone.name
   resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
   ttl                 = 300
-  records = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].private_ip_address]
-  provider = azurerm.private_dns
+  records             = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].private_ip_address]
+  provider            = azurerm.private_dns
 }
 

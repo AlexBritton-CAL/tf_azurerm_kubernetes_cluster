@@ -61,18 +61,18 @@ variable "oidc_issuer_enabled" {
 
 variable "maintenance_window_node_os" {
   type = object({
-    frequency    = optional(string)
-    interval     = optional(string)
-    duration     = optional(number)
-    day_of_week  = optional(string)
+    frequency   = optional(string)
+    interval    = optional(string)
+    duration    = optional(number)
+    day_of_week = optional(string)
     # day_of_month = optional(number)
     # week_index   = optional(string)
-    start_time   = optional(string)
-    utc_offset   = optional(string)
+    start_time = optional(string)
+    utc_offset = optional(string)
     # start_date   = optional(string)
     # not_allowed = optional(object({
-      # start = string
-      # end   = string
+    # start = string
+    # end   = string
     # }))
   })
   default     = null
@@ -81,18 +81,18 @@ variable "maintenance_window_node_os" {
 
 variable "maintenance_window_auto_upgrade" {
   type = object({
-    frequency    = optional(string)
-    interval     = optional(string)
-    duration     = optional(number)
-    day_of_week  = optional(string)
+    frequency   = optional(string)
+    interval    = optional(string)
+    duration    = optional(number)
+    day_of_week = optional(string)
     # day_of_month = optional(number)
     # week_index   = optional(string)
-    start_time   = optional(string)
-    utc_offset   = optional(string)
+    start_time = optional(string)
+    utc_offset = optional(string)
     # start_date   = optional(string)
     # not_allowed = optional(object({
-      # start = string
-      # end   = string
+    # start = string
+    # end   = string
     # }))
   })
   default     = null
@@ -101,17 +101,17 @@ variable "maintenance_window_auto_upgrade" {
 
 variable "default_node_pool" {
   type = object({
-    name                          = optional(string)
-    min_count                     = optional(number)
-    node_count                    = optional(number)
-    max_count                     = optional(number)
-    auto_scaling_enabled          = optional(bool, false)
-    vm_size                       = optional(string)
-    temporary_name_for_rotation   = optional(string)
-    only_critical_addons_enabled  = optional(string)
-    zones                         = optional(list(string))
-    vnet_subnet_id                = optional(string)
-    node_public_ip_enabled        = optional(bool)
+    name                         = optional(string)
+    min_count                    = optional(number)
+    node_count                   = optional(number)
+    max_count                    = optional(number)
+    auto_scaling_enabled         = optional(bool, false)
+    vm_size                      = optional(string)
+    temporary_name_for_rotation  = optional(string)
+    only_critical_addons_enabled = optional(string)
+    zones                        = optional(list(string))
+    vnet_subnet_id               = optional(string)
+    node_public_ip_enabled       = optional(bool)
 
     # capacity_reservation_group_id = optional(string)
     # host_encryption_enabled       = optional(bool)
@@ -196,7 +196,7 @@ variable "default_node_pool" {
     upgrade_settings = optional(object({
       # drain_timeout_in_minutes      = optional(number)
       # node_soak_duration_in_minutes = optional(number)
-      max_surge                     = string
+      max_surge = string
     }))
 
   })
