@@ -34,7 +34,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     tenant_id          = local.kubernetes_cluster.azure_active_directory_role_based_access_control.tenant_id
   }
 
-  private_cluster_enabled    = local.kubernetes_cluster.private_cluster_enabled
+  private_cluster_enabled    = coalesce(try(var.private_cluster_enabled, null), local.kubernetes_cluster.private_cluster_enabled)
   private_dns_zone_id        = local.kubernetes_cluster.private_dns_zone_id
   dns_prefix_private_cluster = local.kubernetes_cluster.dns_prefix_private_cluster
   dns_prefix                 = local.kubernetes_cluster.private_cluster_enabled ? null : local.kubernetes_cluster.dns_prefix
@@ -54,7 +54,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   dynamic "service_mesh_profile" {
-    for_each = local.kubernetes_cluster.service_mesh_profile.service_mesh_enabled == true ? [1] : []
+    for_each = local.kubernetes_cluster.service_mesh_profile.mode == "Istio" ? [1] : []
     content {
       mode                             = local.kubernetes_cluster.service_mesh_profile.mode
       internal_ingress_gateway_enabled = local.kubernetes_cluster.service_mesh_profile.internal_ingress_gateway_enabled

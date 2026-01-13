@@ -47,6 +47,12 @@ variable "node_resource_group_name" {
   description = "The resource group name for the node pool."
 }
 
+variable "private_cluster_enabled" {
+  type        = bool
+  default     = null
+  description = "Whether or not the cluster is a private cluster."
+}
+
 variable "oidc_issuer_enabled" {
   type        = bool
   default     = null
@@ -215,4 +221,22 @@ variable "network_profile" {
   })
   description = "The network profile for the Kubernetes cluster."
   default     = null
+}
+
+variable "service_mesh_profile" {
+  type = object({
+    mode                             = string
+    internal_ingress_gateway_enabled = optional(bool)
+    external_ingress_gateway_enabled = optional(bool)
+    revisions                        = optional(list(string), [])
+    # certificate_authority = optional(object({
+    #   key_vault_id           = string
+    #   root_cert_object_name  = string
+    #   cert_chain_object_name = string
+    #   cert_object_name       = string
+    #   key_object_name        = string
+    # }))
+  })
+  default     = null
+  description = "The service mesh profile for the Kubernetes cluster."
 }

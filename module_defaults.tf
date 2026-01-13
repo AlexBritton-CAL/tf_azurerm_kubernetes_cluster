@@ -31,7 +31,7 @@ locals {
       }
 
       service_mesh_profile = {
-        service_mesh_enabled             = true
+#        service_mesh_enabled             = true
         mode                             = "Istio"
         internal_ingress_gateway_enabled = true
         external_ingress_gateway_enabled = false
