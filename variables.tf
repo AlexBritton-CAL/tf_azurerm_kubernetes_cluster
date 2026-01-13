@@ -100,7 +100,7 @@ variable "maintenance_window_auto_upgrade" {
 
 variable "default_node_pool" {
   type = object({
-    name                         = optional(string, "systempool")
+    name                         = optional(string, "default")
     min_count                    = optional(number, 2)
     node_count                   = optional(number, 2)
     max_count                    = optional(number, 5)
