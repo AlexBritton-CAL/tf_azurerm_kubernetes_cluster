@@ -142,3 +142,23 @@ variable "service_mesh_profile" {
   description = "The service mesh profile for the Kubernetes cluster."
   default     = {}
 }
+
+variable "azure_active_directory_role_based_access_control" {
+  type = object({
+    tenant_id              = optional(string)
+    admin_group_object_ids = optional(list(string))
+    azure_rbac_enabled     = optional(bool)
+  })
+  default     = null
+  description = "The Azure Active Directory role-based access control for the Kubernetes cluster."
+}
+
+variable "kubelet_identity" {
+  type = object({
+    client_id                 = optional(string)
+    object_id                 = optional(string)
+    user_assigned_identity_id = optional(string)
+  })
+  default     = null
+  description = "The kubelet identity for the Kubernetes cluster."
+}

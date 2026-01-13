@@ -98,7 +98,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   kubernetes_version = local.kubernetes_cluster.kubernetes_version
-  tags               = local.kubernetes_cluster.tags
+  tags               = coalesce(local.kubernetes_cluster.tags, var.tags)
 
   maintenance_window_auto_upgrade {
     frequency   = coalesce(local.kubernetes_cluster.maintenance_window_auto_upgrade.frequency, var.maintenance_window_auto_upgrade.frequency)
