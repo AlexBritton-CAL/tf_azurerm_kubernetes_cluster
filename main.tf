@@ -57,7 +57,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   dynamic "service_mesh_profile" {
-    for_each = local.kube_default.service_mesh_profile.mode == "Istio" ? [1] : []
+    for_each = coalesce(try(var.config.service_mesh_profile.mode, null), local.kube_default.service_mesh_profile.mode) == "Istio" ? [1] : []
     content {
       mode                             = local.kube_default.service_mesh_profile.mode
       internal_ingress_gateway_enabled = local.kube_default.service_mesh_profile.internal_ingress_gateway_enabled
@@ -67,23 +67,23 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                         = coalesce(var.config.default_node_pool.name, var.default_node_pool.name, local.kube_default.default_node_pool.name)
-    min_count                    = coalesce(var.config.default_node_pool.min_count, var.default_node_pool.min_count, local.kube_default.default_node_pool.min_count)
-    node_count                   = coalesce(var.config.default_node_pool.node_count, var.default_node_pool.node_count, local.kube_default.default_node_pool.node_count)
-    max_count                    = coalesce(var.config.default_node_pool.max_count, var.default_node_pool.max_count, local.kube_default.default_node_pool.max_count)
-    auto_scaling_enabled         = coalesce(var.config.default_node_pool.auto_scaling_enabled, var.default_node_pool.auto_scaling_enabled, local.kube_default.default_node_pool.auto_scaling_enabled)
-    vm_size                      = coalesce(var.config.default_node_pool.vm_size, var.default_node_pool.vm_size, local.kube_default.default_node_pool.vm_size)
-    temporary_name_for_rotation  = coalesce(var.config.default_node_pool.temporary_name_for_rotation, var.default_node_pool.temporary_name_for_rotation, local.kube_default.default_node_pool.temporary_name_for_rotation)
-    only_critical_addons_enabled = coalesce(var.config.default_node_pool.only_critical_addons_enabled, var.default_node_pool.only_critical_addons_enabled, local.kube_default.default_node_pool.only_critical_addons_enabled)
-    zones                        = coalesce(var.config.default_node_pool.zones, var.default_node_pool.zones, local.kube_default.default_node_pool.zones)
-    vnet_subnet_id               = coalesce(var.config.default_node_pool.vnet_subnet_id, var.default_node_pool.vnet_subnet_id, local.kube_default.default_node_pool.vnet_subnet_id)
-    node_public_ip_enabled       = coalesce(var.config.default_node_pool.node_public_ip_enabled, var.default_node_pool.node_public_ip_enabled, local.kube_default.default_node_pool.node_public_ip_enabled)
+    name                         = coalesce(try(var.config.default_node_pool.name, null), var.default_node_pool.name, local.kube_default.default_node_pool.name)
+    min_count                    = coalesce(try(var.config.default_node_pool.min_count, null), var.default_node_pool.min_count, local.kube_default.default_node_pool.min_count)
+    node_count                   = coalesce(try(var.config.default_node_pool.node_count, null), var.default_node_pool.node_count, local.kube_default.default_node_pool.node_count)
+    max_count                    = coalesce(try(var.config.default_node_pool.max_count, null), var.default_node_pool.max_count, local.kube_default.default_node_pool.max_count)
+    auto_scaling_enabled         = coalesce(try(var.config.default_node_pool.auto_scaling_enabled, null), var.default_node_pool.auto_scaling_enabled, local.kube_default.default_node_pool.auto_scaling_enabled)
+    vm_size                      = coalesce(try(var.config.default_node_pool.vm_size, null), var.default_node_pool.vm_size, local.kube_default.default_node_pool.vm_size)
+    temporary_name_for_rotation  = coalesce(try(var.config.default_node_pool.temporary_name_for_rotation, null), var.default_node_pool.temporary_name_for_rotation, local.kube_default.default_node_pool.temporary_name_for_rotation)
+    only_critical_addons_enabled = coalesce(try(var.config.default_node_pool.only_critical_addons_enabled, null), var.default_node_pool.only_critical_addons_enabled, local.kube_default.default_node_pool.only_critical_addons_enabled)
+    zones                        = coalesce(try(var.config.default_node_pool.zones, null), var.default_node_pool.zones, local.kube_default.default_node_pool.zones)
+    vnet_subnet_id               = coalesce(try(var.config.default_node_pool.vnet_subnet_id, null), var.default_node_pool.vnet_subnet_id, local.kube_default.default_node_pool.vnet_subnet_id)
+    node_public_ip_enabled       = coalesce(try(var.config.default_node_pool.node_public_ip_enabled, null), var.default_node_pool.node_public_ip_enabled, local.kube_default.default_node_pool.node_public_ip_enabled)
 
     upgrade_settings {
       # max_surge = local.module_defaults.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge
-      max_surge = coalesce(local.kube_default.default_node_pool.upgrade_settings.max_surge, var.default_node_pool.upgrade_settings.max_surge)
+      max_surge = coalesce(try(var.config.default_node_pool.upgrade_settings.max_surge, null), var.default_node_pool.upgrade_settings.max_surge, local.kube_default.default_node_pool.upgrade_settings.max_surge)
     }
-    tags = coalesce(local.kube_default.default_node_pool.tags, var.default_node_pool.tags)
+    tags = coalesce(try(var.config.default_node_pool.tags, null), local.kube_default.default_node_pool.tags, var.default_node_pool.tags)
   }
 
   identity {

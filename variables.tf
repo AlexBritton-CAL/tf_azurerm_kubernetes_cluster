@@ -67,14 +67,14 @@ variable "oidc_issuer_enabled" {
 
 variable "maintenance_window_node_os" {
   type = object({
-    frequency   = optional(string, "Weekly")
-    interval    = optional(string, "1")
-    duration    = optional(number, "4")
-    day_of_week = optional(string, "Sunday")
+    frequency   = optional(string)
+    interval    = optional(string)
+    duration    = optional(number)
+    day_of_week = optional(string)
     # day_of_month = optional(number)
     # week_index   = optional(string)
-    start_time = optional(string, "02:00")
-    utc_offset = optional(string, "+00:00")
+    start_time = optional(string)
+    utc_offset = optional(string)
     # start_date   = optional(string)
     # not_allowed = optional(object({
     # start = string
@@ -87,12 +87,12 @@ variable "maintenance_window_node_os" {
 
 variable "maintenance_window_auto_upgrade" {
   type = object({
-    frequency   = optional(string, "Weekly")
-    interval    = optional(string, "1")
-    duration    = optional(number, 4)
-    day_of_week = optional(string, "Saturday")
-    start_time  = optional(string, "02:00")
-    utc_offset  = optional(string, "+00:00")
+    frequency   = optional(string)
+    interval    = optional(string)
+    duration    = optional(number)
+    day_of_week = optional(string)
+    start_time  = optional(string)
+    utc_offset  = optional(string)
   })
   default     = {}
   description = "values for maintenance window auto upgrade"
@@ -100,17 +100,17 @@ variable "maintenance_window_auto_upgrade" {
 
 variable "default_node_pool" {
   type = object({
-    name                         = optional(string, "default")
-    min_count                    = optional(number, 2)
-    node_count                   = optional(number, 2)
-    max_count                    = optional(number, 5)
-    auto_scaling_enabled         = optional(bool, true)
-    vm_size                      = optional(string, "Standard_B4s_v2")
-    temporary_name_for_rotation  = optional(string, "systemtemp")
-    only_critical_addons_enabled = optional(string, true)
-    zones                        = optional(list(string), ["1", "2", "3"])
+    name                         = optional(string)
+    min_count                    = optional(number)
+    node_count                   = optional(number)
+    max_count                    = optional(number)
+    auto_scaling_enabled         = optional(bool)
+    vm_size                      = optional(string)
+    temporary_name_for_rotation  = optional(string)
+    only_critical_addons_enabled = optional(string)
+    zones                        = optional(list(string))
     vnet_subnet_id               = optional(string)
-    node_public_ip_enabled       = optional(bool, false)
+    node_public_ip_enabled       = optional(bool)
 
     upgrade_settings = object({
       max_surge = optional(string, "10%")
@@ -126,13 +126,13 @@ variable "default_node_pool" {
 
 variable "network_profile" {
   type = object({
-    network_plugin      = optional(string, "azure")
-    network_plugin_mode = optional(string, "overlay")
-    service_cidr        = optional(string, "10.0.11.0/24")
-    pod_cidr            = optional(string, "10.244.0.0/16")
-    dns_service_ip      = optional(string, "10.0.11.10")
-    network_data_plane  = optional(string, "cilium")
-    network_policy      = optional(string, "cilium")
+    network_plugin      = optional(string)
+    network_plugin_mode = optional(string)
+    service_cidr        = optional(string)
+    pod_cidr            = optional(string)
+    dns_service_ip      = optional(string)
+    network_data_plane  = optional(string)
+    network_policy      = optional(string)
   })
   description = "The network profile for the Kubernetes cluster."
   default     = {}
@@ -140,10 +140,10 @@ variable "network_profile" {
 
 variable "service_mesh_profile" {
   type = object({
-    mode                             = optional(string, "Istio")
-    internal_ingress_gateway_enabled = optional(bool, true)
-    external_ingress_gateway_enabled = optional(bool, false)
-    revisions                        = optional(list(string), ["asm-1-25"])
+    mode                             = optional(string)
+    internal_ingress_gateway_enabled = optional(bool)
+    external_ingress_gateway_enabled = optional(bool)
+    revisions                        = optional(list(string))
   })
   description = "The service mesh profile for the Kubernetes cluster."
   default     = {}
@@ -161,8 +161,8 @@ variable "azure_active_directory_role_based_access_control" {
 
 variable "workload_autoscaler_profile" {
   type = object({
-    keda_enabled = optional(bool, true)
-    vpa_enabled  = optional(bool, true)
+    keda_enabled = optional(bool)
+    vpa_enabled  = optional(bool)
   })
   default     = {}
   description = "The workload autoscaler profile for the Kubernetes cluster."
