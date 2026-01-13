@@ -47,13 +47,13 @@ resource "azurerm_kubernetes_cluster" "this" {
   workload_identity_enabled = local.kube_default.workload_identity_enabled
 
   network_profile {
-    network_plugin      = coalesce(var.config.network_profile.network_plugin,  var.network_profile.network_plugin, local.kube_default.network_profile.network_plugin)
-    network_plugin_mode = coalesce(var.config.network_profile.network_plugin_mode, var.network_profile.network_plugin_mode, local.kube_default.network_profile.network_plugin_mode)
-    service_cidr        = coalesce(var.config.network_profile.service_cidr, var.network_profile.service_cidr, local.kube_default.network_profile.service_cidr)
-    pod_cidr            = coalesce(var.config.network_profile.pod_cidr, var.network_profile.pod_cidr, local.kube_default.network_profile.pod_cidr)
-    dns_service_ip      = coalesce(var.config.network_profile.dns_service_ip, var.network_profile.dns_service_ip, local.kube_default.network_profile.dns_service_ip)
-    network_data_plane  = coalesce(var.config.network_profile.network_data_plane, var.network_profile.network_data_plane, local.kube_default.network_profile.network_data_plane)
-    network_policy      = coalesce(var.config.network_profile.network_policy, var.network_profile.network_policy, local.kube_default.network_profile.network_policy)
+    network_plugin      = coalesce(try(var.config.network_profile.network_plugin, null), var.network_profile.network_plugin, local.kube_default.network_profile.network_plugin)
+    network_plugin_mode = coalesce(try(var.config.network_profile.network_plugin_mode, null), var.network_profile.network_plugin_mode, local.kube_default.network_profile.network_plugin_mode)
+    service_cidr        = coalesce(try(var.config.network_profile.service_cidr, null), var.network_profile.service_cidr, local.kube_default.network_profile.service_cidr)
+    pod_cidr            = coalesce(try(var.config.network_profile.pod_cidr, null), var.network_profile.pod_cidr, local.kube_default.network_profile.pod_cidr)
+    dns_service_ip      = coalesce(try(var.config.network_profile.dns_service_ip, null), var.network_profile.dns_service_ip, local.kube_default.network_profile.dns_service_ip)
+    network_data_plane  = coalesce(try(var.config.network_profile.network_data_plane, null), var.network_profile.network_data_plane, local.kube_default.network_profile.network_data_plane)
+    network_policy      = coalesce(try(var.config.network_profile.network_policy, null), var.network_profile.network_policy, local.kube_default.network_profile.network_policy)
   }
 
   dynamic "service_mesh_profile" {
