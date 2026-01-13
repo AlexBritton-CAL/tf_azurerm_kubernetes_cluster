@@ -162,7 +162,7 @@ variable "azure_active_directory_role_based_access_control" {
 variable "workload_autoscaler_profile" {
   type = object({
     keda_enabled = optional(bool)
-    vpa_enabled  = optional(bool)
+    vertical_pod_autoscaler_enabled = optional(bool)
   })
   default     = {}
   description = "The workload autoscaler profile for the Kubernetes cluster."
