@@ -148,7 +148,7 @@ variable "azure_active_directory_role_based_access_control" {
     admin_group_object_ids = optional(list(string))
     azure_rbac_enabled     = optional(bool)
   })
-  default     = null
+  default     = {}
   description = "The Azure Active Directory role-based access control for the Kubernetes cluster."
 }
 

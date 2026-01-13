@@ -33,8 +33,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   local_account_disabled = local.kube_default.local_account_disabled
 
   azure_active_directory_role_based_access_control {
-    azure_rbac_enabled = local.kube_default.azure_active_directory_role_based_access_control.azure_rbac_enabled
-    tenant_id          = local.kube_default.azure_active_directory_role_based_access_control.tenant_id
+    azure_rbac_enabled = coalesce(local.kube_default.azure_active_directory_role_based_access_control.azure_rbac_enabled, try(var.config.azure_active_directory_role_based_access_control.azure_rbac_enabled, null), var.azure_active_directory_role_based_access_control.azure_rbac_enabled)
+    tenant_id          = coalesce(local.kube_default.azure_active_directory_role_based_access_control.tenant_id, try(var.config.azure_active_directory_role_based_access_control.tenant_id, null), var.azure_active_directory_role_based_access_control.tenant_id)
   }
 
   private_cluster_enabled    = coalesce(local.kube_default.private_cluster_enabled, try(var.private_cluster_enabled, null))
