@@ -123,8 +123,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   key_vault_secrets_provider {
-    secret_rotation_enabled  = try(local.kube_default.key_vault_secrets_provider.secret_rotation_enabled, null)
-    secret_rotation_interval = try(local.kube_default.key_vault_secrets_provider.secret_rotation_interval, null)
+    secret_rotation_enabled  = coalesce(try(var.config.key_vault_secrets_provider.secret_rotation_enabled, null), var.key_vault_secrets_provider.secret_rotation_enabled, local.kube_default.key_vault_secrets_provider.secret_rotation_enabled)
+    secret_rotation_interval = coalesce(try(var.config.key_vault_secrets_provider.secret_rotation_interval, null), var.key_vault_secrets_provider.secret_rotation_interval, local.kube_default.key_vault_secrets_provider.secret_rotation_interval)
   }
 
   lifecycle {
