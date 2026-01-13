@@ -153,12 +153,26 @@ variable "azure_active_directory_role_based_access_control" {
   description = "The Azure Active Directory role-based access control for the Kubernetes cluster."
 }
 
-variable "kubelet_identity" {
+variable "workload_autoscaler_profile" {
   type = object({
-    client_id                 = optional(string)
-    object_id                 = optional(string)
-    user_assigned_identity_id = optional(string)
+    keda_enabled = optional(bool)
+    vpa_enabled  = optional(bool)
   })
   default     = null
-  description = "The kubelet identity for the Kubernetes cluster."
+  description = "The workload autoscaler profile for the Kubernetes cluster."
+}
+
+variable "key_vault_secrets_provider" {
+  type = object({
+    secret_rotation_enabled  = optional(bool)
+    secret_rotation_interval = optional(string)
+  })
+  default     = null
+  description = "The key vault secrets provider for the Kubernetes cluster. Either rotation enabled or rotation interval must be specified."
+}
+
+variable "tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the resource."
 }
