@@ -61,9 +61,9 @@ variable "oidc_issuer_enabled" {
 
 variable "maintenance_window_node_os" {
   type = object({
-    frequency    = string
-    interval     = string
-    duration     = number
+    frequency    = optional(string)
+    interval     = optional(string)
+    duration     = optional(number)
     day_of_week  = optional(string)
     # day_of_month = optional(number)
     # week_index   = optional(string)
@@ -81,9 +81,9 @@ variable "maintenance_window_node_os" {
 
 variable "maintenance_window_auto_upgrade" {
   type = object({
-    frequency    = string
-    interval     = string
-    duration     = number
+    frequency    = optional(string)
+    interval     = optional(string)
+    duration     = optional(number)
     day_of_week  = optional(string)
     # day_of_month = optional(number)
     # week_index   = optional(string)
