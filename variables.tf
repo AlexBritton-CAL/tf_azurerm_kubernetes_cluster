@@ -113,7 +113,7 @@ variable "default_node_pool" {
 
   })
   description = "Required. The default node pool for the Kubernetes cluster."
-  default     = null
+  default     = {}
 }
 
 variable "network_profile" {
@@ -132,11 +132,11 @@ variable "network_profile" {
 
 variable "service_mesh_profile" {
   type = object({
-    mode                             = optional(string)
-    internal_ingress_gateway_enabled = optional(bool)
-    external_ingress_gateway_enabled = optional(bool)
-    revisions                        = optional(list(string), [])
+    mode                             = optional(string, "Istio")
+    internal_ingress_gateway_enabled = optional(bool, true)
+    external_ingress_gateway_enabled = optional(bool, false)
+    revisions                        = optional(list(string), ["asm-1-25"])
   })
   description = "The service mesh profile for the Kubernetes cluster."
-  default     = null
+  default     = {}
 }
