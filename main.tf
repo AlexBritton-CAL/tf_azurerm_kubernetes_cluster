@@ -26,10 +26,10 @@ data "azurerm_client_config" "this" {}
 
 resource "azurerm_kubernetes_cluster" "this" {
   name                   = local.kubernetes_cluster_name
-  location               = coalesce(try(var.location, null), try(local.kubernetes_cluster.location, null), var.global_config.global.location)
+  location               = coalesce(var.location, null, try(local.kubernetes_cluster.location, null), var.global_config.global.location)
   resource_group_name    = var.resource_group_name
-  node_resource_group    = coalesce(try(var.node_resource_group_name, null), local.kubernetes_cluster.node_resource_group)
-  oidc_issuer_enabled    = coalesce(try(var.oidc_issuer_enabled, null), local.kubernetes_cluster.oidc_issuer_enabled)
+  node_resource_group    = coalesce(local.kubernetes_cluster.node_resource_group, var.node_resource_group_name, null)
+  oidc_issuer_enabled    = coalesce(local.kubernetes_cluster.oidc_issuer_enabled, var.oidc_issuer_enabled, null)
   local_account_disabled = local.kubernetes_cluster.local_account_disabled
 
   azure_active_directory_role_based_access_control {
@@ -47,13 +47,13 @@ resource "azurerm_kubernetes_cluster" "this" {
   workload_identity_enabled = local.kubernetes_cluster.workload_identity_enabled
 
   network_profile {
-    network_plugin      = coalesce(local.kubernetes_cluster.network_profile.network_plugin, try(var.network_profile.network_plugin, null))
-    network_plugin_mode = coalesce(local.kubernetes_cluster.network_profile.network_plugin_mode, try(var.network_profile.network_plugin_mode, null))
-    service_cidr        = coalesce(local.kubernetes_cluster.network_profile.service_cidr, try(var.network_profile.service_cidr, null))
-    pod_cidr            = coalesce(local.kubernetes_cluster.network_profile.pod_cidr, try(var.network_profile.pod_cidr, null))
-    dns_service_ip      = coalesce(local.kubernetes_cluster.network_profile.dns_service_ip, try(var.network_profile.dns_service_ip, null))
-    network_data_plane  = coalesce(local.kubernetes_cluster.network_profile.network_data_plane, try(var.network_profile.network_data_plane, null))
-    network_policy      = coalesce(local.kubernetes_cluster.network_profile.network_policy, try(var.network_profile.network_policy, null))
+    network_plugin      = coalesce(local.kubernetes_cluster.network_profile.network_plugin, var.network_profile.network_plugin)
+    network_plugin_mode = coalesce(local.kubernetes_cluster.network_profile.network_plugin_mode, var.network_profile.network_plugin_mode)
+    service_cidr        = coalesce(local.kubernetes_cluster.network_profile.service_cidr,var.network_profile.service_cidr)
+    pod_cidr            = coalesce(local.kubernetes_cluster.network_profile.pod_cidr,var.network_profile.pod_cidr)
+    dns_service_ip      = coalesce(local.kubernetes_cluster.network_profile.dns_service_ip, var.network_profile.dns_service_ip)
+    network_data_plane  = coalesce(local.kubernetes_cluster.network_profile.network_data_plane, var.network_profile.network_data_plane)
+    network_policy      = coalesce(local.kubernetes_cluster.network_profile.network_policy, var.network_profile.network_policy)
   }
 
   dynamic "service_mesh_profile" {
@@ -67,22 +67,22 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                         = local.kubernetes_cluster.default_node_pool.name
-    min_count                    = local.kubernetes_cluster.default_node_pool.min_count
-    node_count                   = local.kubernetes_cluster.default_node_pool.node_count
-    max_count                    = local.kubernetes_cluster.default_node_pool.max_count
-    auto_scaling_enabled         = local.kubernetes_cluster.default_node_pool.auto_scaling_enabled
-    vm_size                      = local.kubernetes_cluster.default_node_pool.vm_size
-    temporary_name_for_rotation  = local.kubernetes_cluster.default_node_pool.temporary_name_for_rotation
-    only_critical_addons_enabled = local.kubernetes_cluster.default_node_pool.only_critical_addons_enabled
-    zones                        = local.kubernetes_cluster.default_node_pool.zones
-    vnet_subnet_id               = local.kubernetes_cluster.default_node_pool.vnet_subnet_id
-    node_public_ip_enabled       = local.kubernetes_cluster.default_node_pool.node_public_ip_enabled
+    name                         = coalesce(local.kubernetes_cluster.default_node_pool.name, var.default_node_pool.name)
+    min_count                    = coalesce(local.kubernetes_cluster.default_node_pool.min_count, var.default_node_pool.min_count)
+    node_count                   = coalesce(local.kubernetes_cluster.default_node_pool.node_count, var.default_node_pool.node_count)
+    max_count                    = coalesce(local.kubernetes_cluster.default_node_pool.max_count, var.default_node_pool.max_count)
+    auto_scaling_enabled         = coalesce(local.kubernetes_cluster.default_node_pool.auto_scaling_enabled, var.default_node_pool.auto_scaling_enabled)
+    vm_size                      = coalesce(local.kubernetes_cluster.default_node_pool.vm_size, var.default_node_pool.vm_size)
+    temporary_name_for_rotation  = coalesce(local.kubernetes_cluster.default_node_pool.temporary_name_for_rotation, var.default_node_pool.temporary_name_for_rotation)
+    only_critical_addons_enabled = coalesce(local.kubernetes_cluster.default_node_pool.only_critical_addons_enabled, var.default_node_pool.only_critical_addons_enabled)
+    zones                        = coalesce(local.kubernetes_cluster.default_node_pool.zones, var.default_node_pool.zones)
+    vnet_subnet_id               = coalesce(local.kubernetes_cluster.default_node_pool.vnet_subnet_id, var.default_node_pool.vnet_subnet_id)
+    node_public_ip_enabled       = coalesce(local.kubernetes_cluster.default_node_pool.node_public_ip_enabled, var.default_node_pool.node_public_ip_enabled)
 
     upgrade_settings {
-      max_surge = local.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge
+      max_surge = coalesce(local.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge, var.default_node_pool.upgrade_settings.max_surge)
     }
-    tags = local.kubernetes_cluster.default_node_pool.tags
+    tags = coalesce(local.kubernetes_cluster.default_node_pool.tags, var.default_node_pool.tags)
   }
 
   identity {
@@ -100,21 +100,21 @@ resource "azurerm_kubernetes_cluster" "this" {
   tags               = local.kubernetes_cluster.tags
 
   maintenance_window_auto_upgrade {
-    frequency   = local.kubernetes_cluster.maintenance_window_auto_upgrade.frequency
-    interval    = local.kubernetes_cluster.maintenance_window_auto_upgrade.interval
-    duration    = local.kubernetes_cluster.maintenance_window_auto_upgrade.duration
-    day_of_week = local.kubernetes_cluster.maintenance_window_auto_upgrade.day_of_week
-    start_time  = local.kubernetes_cluster.maintenance_window_auto_upgrade.start_time
-    utc_offset  = local.kubernetes_cluster.maintenance_window_auto_upgrade.utc_offset
+    frequency   = coalesce(local.kubernetes_cluster.maintenance_window_auto_upgrade.frequency, var.maintenance_window_auto_upgrade.frequency)
+    interval    = coalesce(local.kubernetes_cluster.maintenance_window_auto_upgrade.interval, var.maintenance_window_auto_upgrade.interval)
+    duration    = coalesce(local.kubernetes_cluster.maintenance_window_auto_upgrade.duration, var.maintenance_window_auto_upgrade.duration)
+    day_of_week = coalesce(local.kubernetes_cluster.maintenance_window_auto_upgrade.day_of_week, var.maintenance_window_auto_upgrade.day_of_week)
+    start_time  = coalesce(local.kubernetes_cluster.maintenance_window_auto_upgrade.start_time, var.maintenance_window_auto_upgrade.start_time)
+    utc_offset  = coalesce(local.kubernetes_cluster.maintenance_window_auto_upgrade.utc_offset, var.maintenance_window_auto_upgrade.utc_offset)
   }
 
   maintenance_window_node_os {
-    frequency   = local.kubernetes_cluster.maintenance_window_node_os.frequency
-    interval    = local.kubernetes_cluster.maintenance_window_node_os.interval
-    duration    = local.kubernetes_cluster.maintenance_window_node_os.duration
-    day_of_week = local.kubernetes_cluster.maintenance_window_node_os.day_of_week
-    start_time  = local.kubernetes_cluster.maintenance_window_node_os.start_time
-    utc_offset  = local.kubernetes_cluster.maintenance_window_node_os.utc_offset
+    frequency   = coalesce(local.kubernetes_cluster.maintenance_window_node_os.frequency, var.maintenance_window_node_os.frequency)
+    interval    = coalesce(local.kubernetes_cluster.maintenance_window_node_os.interval, var.maintenance_window_node_os.interval)
+    duration    = coalesce(local.kubernetes_cluster.maintenance_window_node_os.duration, var.maintenance_window_node_os.duration)
+    day_of_week = coalesce(local.kubernetes_cluster.maintenance_window_node_os.day_of_week, var.maintenance_window_node_os.day_of_week)
+    start_time  = coalesce(local.kubernetes_cluster.maintenance_window_node_os.start_time, var.maintenance_window_node_os.start_time)
+    utc_offset  = coalesce(local.kubernetes_cluster.maintenance_window_node_os.utc_offset, var.maintenance_window_node_os.utc_offset)
   }
   workload_autoscaler_profile {
     keda_enabled                    = local.kubernetes_cluster.workload_autoscaler_profile.keda_enabled
