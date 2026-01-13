@@ -80,7 +80,8 @@ resource "azurerm_kubernetes_cluster" "this" {
     node_public_ip_enabled       = coalesce(local.kubernetes_cluster.default_node_pool.node_public_ip_enabled, var.default_node_pool.node_public_ip_enabled)
 
     upgrade_settings {
-      max_surge = local.module_defaults.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge
+      # max_surge = local.module_defaults.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge
+      max_surge = var.default_node_pool.upgrade_settings.max_surge
     }
     tags = coalesce(local.kubernetes_cluster.default_node_pool.tags, var.default_node_pool.tags)
   }
