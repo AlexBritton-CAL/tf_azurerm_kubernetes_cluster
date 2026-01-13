@@ -9,6 +9,12 @@ variable "name" {
   }
 }
 
+variable "generate_name" {
+  type        = bool
+  default     = true
+  description = "Whether to generate the name of the resource using the resource prefix and instance name."
+}
+
 variable "config" {
   description = "The configuration for the layer"
   type        = any
