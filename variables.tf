@@ -211,16 +211,15 @@ variable "default_node_pool" {
 
 variable "network_profile" {
   type = object({
-    network_plugin      = optional(string)
-    network_plugin_mode = optional(string)
-    service_cidr        = optional(string)
-    pod_cidr            = optional(string)
-    dns_service_ip      = optional(string)
-    network_data_plane  = optional(string)
-    network_policy      = optional(string)
+    network_plugin      = optional(string, "azure")
+    network_plugin_mode = optional(string, "overlay")
+    service_cidr        = optional(string, "10.0.11.0/24")
+    pod_cidr            = optional(string, "10.244.0.0/16")
+    dns_service_ip      = optional(string, "10.0.11.10")
+    network_data_plane  = optional(string, "cilium")
+    network_policy      = optional(string, "cilium")
   })
   description = "The network profile for the Kubernetes cluster."
-  default     = null
 }
 
 variable "service_mesh_profile" {
