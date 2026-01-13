@@ -5,9 +5,9 @@ locals {
   kubernetes_cluster = merge(
     local.kubernetes_cluster_shallow,
     {
-      default_node_pool               = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}))
-      network_profile                 = merge(local.module_defaults.kubernetes_cluster.network_profile, try(var.config.network_profile, {}))
-      maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}), try(var.maintenance_window_auto_upgrade, {}))
+      default_node_pool               = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}), try(var.default_node_pool, {}))
+      network_profile                 = merge(local.module_defaults.kubernetes_cluster.network_profile, try(var.config.network_profile, {}), try(var.network_profile, {}))
+      maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}))
       maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}), try(var.maintenance_window_node_os, {}))
       workload_autoscaler_profile     = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))
       tags                            = merge(try(var.global_config.global.tags, {}), local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
@@ -64,24 +64,22 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                         = local.kubernetes_cluster.default_node_pool.name
-    min_count                    = local.kubernetes_cluster.default_node_pool.min_count
-    node_count                   = local.kubernetes_cluster.default_node_pool.node_count
-    max_count                    = local.kubernetes_cluster.default_node_pool.max_count
-    auto_scaling_enabled         = local.kubernetes_cluster.default_node_pool.auto_scaling_enabled
-    vm_size                      = local.kubernetes_cluster.default_node_pool.vm_size
-    temporary_name_for_rotation  = local.kubernetes_cluster.default_node_pool.temporary_name_for_rotation
-    only_critical_addons_enabled = local.kubernetes_cluster.default_node_pool.only_critical_addons_enabled
-    zones                        = local.kubernetes_cluster.default_node_pool.zones
-    vnet_subnet_id               = local.kubernetes_cluster.default_node_pool.vnet_subnet_id
-    node_public_ip_enabled       = local.kubernetes_cluster.default_node_pool.node_public_ip_enabled
-
+    name                         = coalesce(try(var.default_node_pool.name, null), local.kubernetes_cluster.default_node_pool.name)
+    min_count                    = coalesce(try(var.default_node_pool.min_count, null), local.kubernetes_cluster.default_node_pool.min_count)
+    node_count                   = coalesce(try(var.default_node_pool.node_count, null), local.kubernetes_cluster.default_node_pool.node_count)
+    max_count                    = coalesce(try(var.default_node_pool.max_count, null), local.kubernetes_cluster.default_node_pool.max_count)
+    auto_scaling_enabled         = coalesce(try(var.default_node_pool.auto_scaling_enabled, null), local.kubernetes_cluster.default_node_pool.auto_scaling_enabled)
+    vm_size                      = coalesce(try(var.default_node_pool.vm_size, null), local.kubernetes_cluster.default_node_pool.vm_size)
+    temporary_name_for_rotation  = coalesce(try(var.default_node_pool.temporary_name_for_rotation, null), local.kubernetes_cluster.default_node_pool.temporary_name_for_rotation)
+    only_critical_addons_enabled = coalesce(try(var.default_node_pool.only_critical_addons_enabled, null), local.kubernetes_cluster.default_node_pool.only_critical_addons_enabled)
+    zones                        = coalesce(try(var.default_node_pool.zones, null), local.kubernetes_cluster.default_node_pool.zones)
+    vnet_subnet_id               = coalesce(try(var.default_node_pool.vnet_subnet_id, null), local.kubernetes_cluster.default_node_pool.vnet_subnet_id)
+    node_public_ip_enabled       = coalesce(try(var.default_node_pool.node_public_ip_enabled, null), local.kubernetes_cluster.default_node_pool.node_public_ip_enabled)
 
     upgrade_settings {
-      max_surge = local.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge
+      max_surge = coalesce(try(var.default_node_pool.upgrade_settings.max_surge, null), local.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge)
     }
-
-    tags = local.kubernetes_cluster.default_node_pool.tags
+    tags = coalesce(try(var.default_node_pool.tags, null), local.kubernetes_cluster.default_node_pool.tags)
   }
 
   identity {
