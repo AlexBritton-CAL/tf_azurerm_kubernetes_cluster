@@ -81,7 +81,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 
     upgrade_settings {
       # max_surge = local.module_defaults.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge
-      max_surge = var.default_node_pool.upgrade_settings.max_surge
+      max_surge = coalesce(local.kubernetes_cluster.default_node_pool.upgrade_settings.max_surge, var.default_node_pool.upgrade_settings.max_surge)
     }
     tags = coalesce(local.kubernetes_cluster.default_node_pool.tags, var.default_node_pool.tags)
   }
