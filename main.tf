@@ -6,7 +6,6 @@ locals {
     local.kubernetes_cluster_shallow,
     {
       default_node_pool                  = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.config.default_node_pool, {}), try(var.default_node_pool, {}))
-      default_node_pool.upgrade_settings = merge(local.module_defaults.kubernetes_cluster.default_node_pool.upgrade_settings, try(var.config.default_node_pool.upgrade_settings, {}), try(var.default_node_pool.upgrade_settings, {}))
       network_profile                    = merge(local.module_defaults.kubernetes_cluster.network_profile, try(var.config.network_profile, {}), try(var.network_profile, {}))
       maintenance_window_auto_upgrade    = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}), try(var.maintenance_window_auto_upgrade, {}))
       maintenance_window_node_os         = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}), try(var.maintenance_window_node_os, {}))
@@ -14,6 +13,8 @@ locals {
       tags                               = merge(try(var.global_config.global.tags, {}), local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
     }
   )
+
+  kube_default = local.module_defaults.kubernetes_cluster
 
   kubernetes_cluster_name = local.kubernetes_cluster.generate_name ? "${var.resource_prefix}-${var.instance_name}-aks" : var.name
 
