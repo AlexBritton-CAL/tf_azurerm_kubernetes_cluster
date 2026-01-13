@@ -5,13 +5,13 @@ locals {
   kubernetes_cluster = merge(
     local.kubernetes_cluster_shallow,
     {
-      default_node_pool                  = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.default_node_pool, {}), try(var.config.default_node_pool, {}))
-      network_profile                    = merge(try(var.config.network_profile, {}), try(var.network_profile, {}))
+      default_node_pool = merge(local.module_defaults.kubernetes_cluster.default_node_pool, try(var.default_node_pool, {}), try(var.config.default_node_pool, {}))
+      network_profile   = merge(try(var.config.network_profile, {}), try(var.network_profile, {}))
       # network_profile                    = merge(local.module_defaults.kubernetes_cluster.network_profile, try(var.config.network_profile, {}), try(var.network_profile, {}))
-      maintenance_window_auto_upgrade    = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}), try(var.maintenance_window_auto_upgrade, {}))
-      maintenance_window_node_os         = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}), try(var.maintenance_window_node_os, {}))
-      workload_autoscaler_profile        = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))
-      tags                               = merge(try(var.global_config.global.tags, {}), local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
+      maintenance_window_auto_upgrade = merge(local.module_defaults.kubernetes_cluster.maintenance_window_auto_upgrade, try(var.config.maintenance_window_auto_upgrade, {}), try(var.maintenance_window_auto_upgrade, {}))
+      maintenance_window_node_os      = merge(local.module_defaults.kubernetes_cluster.maintenance_window_node_os, try(var.config.maintenance_window_node_os, {}), try(var.maintenance_window_node_os, {}))
+      workload_autoscaler_profile     = merge(local.module_defaults.kubernetes_cluster.workload_autoscaler_profile, try(var.config.workload_autoscaler_profile, {}))
+      tags                            = merge(try(var.global_config.global.tags, {}), local.module_defaults.kubernetes_cluster.tags, try(var.config.tags, {}))
     }
   )
 
@@ -49,8 +49,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   network_profile {
     network_plugin      = coalesce(local.kubernetes_cluster.network_profile.network_plugin, var.network_profile.network_plugin)
     network_plugin_mode = coalesce(local.kubernetes_cluster.network_profile.network_plugin_mode, var.network_profile.network_plugin_mode)
-    service_cidr        = coalesce(local.kubernetes_cluster.network_profile.service_cidr,var.network_profile.service_cidr)
-    pod_cidr            = coalesce(local.kubernetes_cluster.network_profile.pod_cidr,var.network_profile.pod_cidr)
+    service_cidr        = coalesce(local.kubernetes_cluster.network_profile.service_cidr, var.network_profile.service_cidr)
+    pod_cidr            = coalesce(local.kubernetes_cluster.network_profile.pod_cidr, var.network_profile.pod_cidr)
     dns_service_ip      = coalesce(local.kubernetes_cluster.network_profile.dns_service_ip, var.network_profile.dns_service_ip)
     network_data_plane  = coalesce(local.kubernetes_cluster.network_profile.network_data_plane, var.network_profile.network_data_plane)
     network_policy      = coalesce(local.kubernetes_cluster.network_profile.network_policy, var.network_profile.network_policy)

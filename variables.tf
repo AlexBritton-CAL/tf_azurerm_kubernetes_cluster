@@ -85,8 +85,8 @@ variable "maintenance_window_auto_upgrade" {
     interval    = optional(string, "1")
     duration    = optional(number, 4)
     day_of_week = optional(string, "Saturday")
-    start_time = optional(string, "02:00")
-    utc_offset = optional(string, "+00:00")
+    start_time  = optional(string, "02:00")
+    utc_offset  = optional(string, "+00:00")
   })
   default     = {}
   description = "values for maintenance window auto upgrade"
@@ -113,7 +113,9 @@ variable "default_node_pool" {
 
   })
   description = "Required. The default node pool for the Kubernetes cluster."
-  default     = {}
+  default = {
+    upgrade_settings = {}
+  }
 }
 
 variable "network_profile" {
@@ -127,7 +129,7 @@ variable "network_profile" {
     network_policy      = optional(string, "cilium")
   })
   description = "The network profile for the Kubernetes cluster."
-  default = {}
+  default     = {}
 }
 
 variable "service_mesh_profile" {
