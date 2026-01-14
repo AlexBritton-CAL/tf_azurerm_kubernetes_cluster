@@ -1,7 +1,7 @@
 data "azurerm_container_registry" "this" {
   count               = local.acr_connected
-  name                = coalese(try(var.config.container_registry.name, var.container_registry.name))
-  resource_group_name = coalese(try(var.config.container_registry.resource_group_name, var.container_registry.resource_group_name))
+  name                = coalesce(try(var.config.container_registry.name, var.container_registry.name))
+  resource_group_name = coalesce(try(var.config.container_registry.resource_group_name, var.container_registry.resource_group_name))
 }
 
 resource "azurerm_role_assignment" "acr_pull" {
