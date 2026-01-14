@@ -77,6 +77,15 @@ variable "local_account_disabled" {
   description = "Whether or not the local account is disabled for the Kubernetes cluster."
 }
 
+variable "container_registry" {
+  type = object({
+    name                = optional(string)
+    resource_group_name = optional(string)
+  })
+  default     = {}
+  description = "The container registry to connect to the Kubernetes cluster."
+}
+
 variable "maintenance_window_node_os" {
   type = object({
     frequency   = optional(string)
