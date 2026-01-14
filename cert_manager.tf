@@ -5,7 +5,7 @@ locals {
 
 resource "azurerm_user_assigned_identity" "certmanager" {
   location            = azurerm_kubernetes_cluster.this.location
-  name                = try(local.kubernetes_cluster.identity.cluster_identity, "${var.resource_prefix}-${var.instance_name}-aks-certmanagerid")
+  name                = coaltesce(try(var.config.identity.certmanager_identity, null), local.kube_default.identity.certmanager_identity)
   resource_group_name = var.resource_group_name
 }
 
