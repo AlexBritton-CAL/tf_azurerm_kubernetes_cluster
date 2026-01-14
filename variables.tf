@@ -79,7 +79,7 @@ variable "local_account_disabled" {
 
 variable "container_registry" {
   type = object({
-    name                = optional(string)
+    name                = optional(string, "")
     resource_group_name = optional(string)
   })
   default     = {}
