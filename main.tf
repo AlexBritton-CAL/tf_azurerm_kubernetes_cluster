@@ -20,6 +20,8 @@ locals {
   kubernetes_cluster_name = coalesce(try(local.kube_default.generate_name, null), try(var.config.generate_name, null), var.generate_name) ? "${var.resource_prefix}-${var.instance_name}-aks" : var.name
 
   acr_connected = try(var.config.container_registry.name, var.container_registry.name,  "") != "" ? 1 : 0
+
+  service_mesh_profile = coalesce(try(var.config.service_mesh_profile, []), try(var.service_mesh_profile, []), local.kube_default.service_mesh_profile)
 }
 
 data "azurerm_client_config" "this" {}
@@ -56,12 +58,12 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   dynamic "service_mesh_profile" {
-    for_each = coalesce(try(var.config.service_mesh_profile.mode, null), local.kube_default.service_mesh_profile.mode) == "Istio" ? [1] : []
+    for_each = local.service_mesh_profile.mode == "Istio" ? [1] : []
     content {
-      mode                             = local.kube_default.service_mesh_profile.mode
-      internal_ingress_gateway_enabled = local.kube_default.service_mesh_profile.internal_ingress_gateway_enabled
-      external_ingress_gateway_enabled = local.kube_default.service_mesh_profile.external_ingress_gateway_enabled
-      revisions                        = local.kube_default.service_mesh_profile.revisions
+      mode                             = local.service_mesh_profile.mode
+      internal_ingress_gateway_enabled = local.service_mesh_profile.internal_ingress_gateway_enabled
+      external_ingress_gateway_enabled = local.service_mesh_profile.external_ingress_gateway_enabled
+      revisions                        = local.service_mesh_profile.revisions
     }
   }
 
