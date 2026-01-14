@@ -9,5 +9,5 @@ output "oidc_issuer_url" {
 }
 
 output "kubernetes_cluster" {
-  value = local.kubernetes_cluster
+  value = local.kube_default
 }
