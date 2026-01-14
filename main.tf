@@ -21,7 +21,7 @@ locals {
 
   acr_connected = try(var.config.container_registry.name, var.container_registry.name,  "") != "" ? 1 : 0
 
-  service_mesh_profile = coalesce(try(var.config.service_mesh_profile, null), try(var.service_mesh_profile, null), local.kube_default.service_mesh_profile)
+  service_mesh_profile = merge(try(var.config.service_mesh_profile, var.service_mesh_profile, null), local.kube_default.service_mesh_profile)
 }
 
 data "azurerm_client_config" "this" {}
