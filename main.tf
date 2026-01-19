@@ -135,6 +135,13 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 }
 
+locals {
+  cluster_node_pools = merge(
+    {},
+    try(local.kube_default.node_pools, {}),
+    try(var.node_pools, {})
+  )
+}
 module "azurerm_kubernetes_cluster_node_pool" {
   for_each                      = try(local.kube_default.node_pools, var.config.node_pools, [])
   source                        = "git::https://github.com/AlexBritton-CAL/ts_azurerm_kubernetes_cluster_node_pool.git"
