@@ -92,8 +92,8 @@ variable "maintenance_window_node_os" {
     interval    = optional(string)
     duration    = optional(number)
     day_of_week = optional(string)
-    start_time = optional(string)
-    utc_offset = optional(string)
+    start_time  = optional(string)
+    utc_offset  = optional(string)
   })
   default     = null
   description = "values for maintenance window node os"
@@ -175,7 +175,7 @@ variable "azure_active_directory_role_based_access_control" {
 
 variable "workload_autoscaler_profile" {
   type = object({
-    keda_enabled = optional(bool)
+    keda_enabled                    = optional(bool)
     vertical_pod_autoscaler_enabled = optional(bool)
   })
   default     = {}
@@ -199,13 +199,13 @@ variable "tags" {
 
 variable "node_pools" {
   type = map(object({
-    name                          = string
-    vm_size                       = string
+    name    = string
+    vm_size = string
     # capacity_reservation_group_id = optional(string)
-    auto_scaling_enabled          = optional(bool, false)
-    max_count                     = optional(number)
-    min_count                     = optional(number)
-    node_count                    = optional(number)
+    auto_scaling_enabled = optional(bool, false)
+    max_count            = optional(number)
+    min_count            = optional(number)
+    node_count           = optional(number)
     # host_encryption_enabled       = optional(bool)
     # node_public_ip_enabled        = optional(bool)
     # eviction_policy               = optional(string)
@@ -214,7 +214,7 @@ variable "node_pools" {
     # gpu_instance                  = optional(string)
     # gpu_driver                    = optional(string)
     # kubelet_disk_type             = optional(string)
-    max_pods                      = optional(number)
+    max_pods = optional(number)
     # mode                          = optional(string)
     # node_network_profile = optional(object({
     #   allowed_host_ports = optional(list(object({
@@ -238,12 +238,12 @@ variable "node_pools" {
     # proximity_placement_group_id = optional(string)
     # spot_max_price               = optional(string)
     # snapshot_id                  = optional(string)
-    tags                         = optional(map(string))
+    tags = optional(map(string))
     # scale_down_mode              = optional(string)
     # ultra_ssd_enabled            = optional(bool)
     # vnet_subnet_id               = optional(string)
-    zones                        = optional(list(string))
-    temporary_name_for_rotation  = optional(string)
+    zones                       = optional(list(string))
+    temporary_name_for_rotation = optional(string)
     # workload_runtime             = optional(string)
     # windows_profile = optional(object({
     #   outbound_nat_enabled = optional(bool)
@@ -298,7 +298,7 @@ variable "node_pools" {
     #     vm_swappiness                      = optional(number)
     #     vm_vfs_cache_pressure              = optional(number)
     #   }))
-    }))
+  }))
   # }))
   default     = {}
   description = "Optional. The additional node pools for the Kubernetes cluster."

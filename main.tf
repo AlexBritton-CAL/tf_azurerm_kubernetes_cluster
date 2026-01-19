@@ -19,7 +19,7 @@ locals {
 
   kubernetes_cluster_name = coalesce(try(local.kube_default.generate_name, null), try(var.config.generate_name, null), var.generate_name) ? "${var.resource_prefix}-${var.instance_name}-aks" : var.name
 
-  acr_connected = try(var.config.container_registry.name, var.container_registry.name,  "") != "" ? 1 : 0
+  acr_connected = try(var.config.container_registry.name, var.container_registry.name, "") != "" ? 1 : 0
 
   service_mesh_profile = merge(try(var.config.service_mesh_profile, var.service_mesh_profile, null), local.kube_default.service_mesh_profile)
 }
@@ -46,7 +46,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     azure_rbac_enabled = coalesce(try(var.config.azure_active_directory_role_based_access_control.azure_rbac_enabled, null), var.azure_active_directory_role_based_access_control.azure_rbac_enabled, local.kube_default.azure_active_directory_role_based_access_control.azure_rbac_enabled)
     tenant_id          = coalesce(try(var.config.azure_active_directory_role_based_access_control.tenant_id, null), var.azure_active_directory_role_based_access_control.tenant_id, local.kube_default.azure_active_directory_role_based_access_control.tenant_id)
   }
-  
+
   network_profile {
     network_plugin      = coalesce(try(var.config.network_profile.network_plugin, null), var.network_profile.network_plugin, local.kube_default.network_profile.network_plugin)
     network_plugin_mode = coalesce(try(var.config.network_profile.network_plugin_mode, null), var.network_profile.network_plugin_mode, local.kube_default.network_profile.network_plugin_mode)
