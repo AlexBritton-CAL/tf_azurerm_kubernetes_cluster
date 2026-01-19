@@ -145,7 +145,7 @@ locals {
 module "azurerm_kubernetes_cluster_node_pool" {
   #for_each                      = try(local.kube_default.node_pools, var.config.node_pools, [])
   for_each                      = local.cluster_node_pools
-  source                        = "git::https://github.com/AlexBritton-CAL/ts_azurerm_kubernetes_cluster_node_pool.git"
+  source                        = "./modules/cluster_node_pool"
   name                          = each.key
   config                        = each.value
   global_config                 = var.global_config
