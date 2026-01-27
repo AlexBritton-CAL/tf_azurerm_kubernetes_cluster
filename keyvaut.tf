@@ -1,0 +1,19 @@
+locals {
+  keyvault-ns      = "aks-istio-system"
+  keyvault-sa_name = "keyvault"
+}
+
+resource "azurerm_user_assigned_identity" "keyvault" {
+  location            = azurerm_kubernetes_cluster.this.location
+  name                = coalesce(try(var.config.identity.keyvault_identity, null), local.module_defaults.identity.keyvault_identity)
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_federated_identity_credential" "keyvault" {
+  name                = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.keyvault-ns}-${local.keyvault-sa_name}"
+  resource_group_name = var.resource_group_name
+  audience            = ["api://AzureADTokenExchange"]
+  issuer              = azurerm_kubernetes_cluster.this.oidc_issuer_url
+  parent_id           = azurerm_user_assigned_identity.keyvault.id
+  subject             = "system:serviceaccount:${local.keyvault-ns}:${local.keyvault-sa_name}"
+}
