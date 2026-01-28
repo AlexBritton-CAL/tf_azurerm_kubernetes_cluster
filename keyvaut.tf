@@ -18,7 +18,7 @@ resource "azurerm_federated_identity_credential" "keyvault" {
   subject             = "system:serviceaccount:${local.keyvault-ns}:${local.keyvault-sa_name}"
 }
 
-data "azurerm_keyvault" "keyvault" {
+data "azurerm_key_vault" "keyvault" {
   name                = var.global_config.global.certificate_keyvault.name
   resource_group_name = var.global_config.global.certificate_keyvault.resource_group_name
 }
