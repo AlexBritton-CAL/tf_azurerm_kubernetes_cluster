@@ -22,3 +22,10 @@ data "azurerm_key_vault" "keyvault" {
   name                = var.global_config.global.certificate_keyvault.name
   resource_group_name = var.global_config.global.certificate_keyvault.resource_group_name
 }
+
+resource "azurerm_role_assignment" "csi_driver_keyvault" {
+  principal_id                     = azurerm_user_assigned_identity.keyvault.principal_id
+  role_definition_name             = "Key Vault Certificate User"
+  scope                            = data.azurerm_key_vault.keyvault.id
+  skip_service_principal_aad_check = true
+}
