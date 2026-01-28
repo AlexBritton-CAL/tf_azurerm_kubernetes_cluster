@@ -17,3 +17,8 @@ resource "azurerm_federated_identity_credential" "keyvault" {
   parent_id           = azurerm_user_assigned_identity.keyvault.id
   subject             = "system:serviceaccount:${local.keyvault-ns}:${local.keyvault-sa_name}"
 }
+
+data "azrerm_keyvault" "keyvault" {
+  name                = var.global_config.global.certificate_keyvault.name
+  resource_group_name = var.global_config.global.certificate_keyvault.resource_group_name
+}
