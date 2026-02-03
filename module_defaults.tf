@@ -13,7 +13,7 @@ locals {
 
       azure_active_directory_role_based_access_control = {
         azure_rbac_enabled = true
-        tenant_id          = try(var.config.defualts.tenant_id, data.azurerm_client_config.this.tenant_id)
+        tenant_id          = try(var.global_config.global.tenant_id, data.azurerm_client_config.this.tenant_id)
       }
 
       private_cluster_enabled    = true
