@@ -68,22 +68,21 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                         = coalesce(try(var.config.default_node_pool.name, null), var.default_node_pool.name, local.kube_default.default_node_pool.name)
-    min_count                    = coalesce(try(var.config.default_node_pool.min_count, null), var.default_node_pool.min_count, local.kube_default.default_node_pool.min_count)
-    node_count                   = coalesce(try(var.config.default_node_pool.node_count, null), var.default_node_pool.node_count, local.kube_default.default_node_pool.node_count)
-    max_count                    = coalesce(try(var.config.default_node_pool.max_count, null), var.default_node_pool.max_count, local.kube_default.default_node_pool.max_count)
-    auto_scaling_enabled         = coalesce(try(var.config.default_node_pool.auto_scaling_enabled, null), var.default_node_pool.auto_scaling_enabled, local.kube_default.default_node_pool.auto_scaling_enabled)
-    vm_size                      = coalesce(try(var.config.default_node_pool.vm_size, null), var.default_node_pool.vm_size, local.kube_default.default_node_pool.vm_size)
-    temporary_name_for_rotation  = coalesce(try(var.config.default_node_pool.temporary_name_for_rotation, null), var.default_node_pool.temporary_name_for_rotation, local.kube_default.default_node_pool.temporary_name_for_rotation)
-    only_critical_addons_enabled = coalesce(try(var.config.default_node_pool.only_critical_addons_enabled, null), var.default_node_pool.only_critical_addons_enabled, local.kube_default.default_node_pool.only_critical_addons_enabled)
-    zones                        = coalesce(try(var.config.default_node_pool.zones, null), var.default_node_pool.zones, local.kube_default.default_node_pool.zones)
-    vnet_subnet_id               = coalesce(try(var.config.default_node_pool.vnet_subnet_id, null), var.default_node_pool.vnet_subnet_id, local.kube_default.default_node_pool.vnet_subnet_id)
-    node_public_ip_enabled       = coalesce(try(var.config.default_node_pool.node_public_ip_enabled, null), var.default_node_pool.node_public_ip_enabled, local.kube_default.default_node_pool.node_public_ip_enabled)
-
+    name                         = coalesce(try(var.config.default_node_pool.name, var.default_node_pool.name, null), local.kube_default.default_node_pool.name)
+    min_count                    = coalesce(try(var.config.default_node_pool.min_count, var.default_node_pool.min_count, null), local.kube_default.default_node_pool.min_count)
+    node_count                   = coalesce(try(var.config.default_node_pool.node_count, var.default_node_pool.node_count, null), local.kube_default.default_node_pool.node_count)
+    max_count                    = coalesce(try(var.config.default_node_pool.max_count, var.default_node_pool.max_count, null), local.kube_default.default_node_pool.max_count)
+    auto_scaling_enabled         = coalesce(try(var.config.default_node_pool.auto_scaling_enabled, var.default_node_pool.auto_scaling_enabled, null), local.kube_default.default_node_pool.auto_scaling_enabled)
+    vm_size                      = coalesce(try(var.config.default_node_pool.vm_size, var.default_node_pool.vm_size, null), local.kube_default.default_node_pool.vm_size)
+    temporary_name_for_rotation  = coalesce(try(var.config.default_node_pool.temporary_name_for_rotation, var.default_node_pool.temporary_name_for_rotation, null), local.kube_default.default_node_pool.temporary_name_for_rotation)
+    only_critical_addons_enabled = coalesce(try(var.config.default_node_pool.only_critical_addons_enabled, var.default_node_pool.only_critical_addons_enabled, null), local.kube_default.default_node_pool.only_critical_addons_enabled)
+    zones                        = coalesce(try(var.config.default_node_pool.zones, var.default_node_pool.zones, null), local.kube_default.default_node_pool.zones)
+    vnet_subnet_id               = coalesce(try(var.config.default_node_pool.vnet_subnet_id, var.default_node_pool.vnet_subnet_id, null), local.kube_default.default_node_pool.vnet_subnet_id)
+    node_public_ip_enabled       = coalesce(try(var.config.default_node_pool.node_public_ip_enabled, var.default_node_pool.node_public_ip_enabled, null), local.kube_default.default_node_pool.node_public_ip_enabled)
     upgrade_settings {
-      max_surge = coalesce(try(var.config.default_node_pool.upgrade_settings.max_surge, null), var.default_node_pool.upgrade_settings.max_surge, local.kube_default.default_node_pool.upgrade_settings.max_surge)
+      max_surge = coalesce(try(var.config.default_node_pool.upgrade_settings.max_surge, var.default_node_pool.upgrade_settings.max_surge, null), local.kube_default.default_node_pool.upgrade_settings.max_surge)
     }
-    tags = coalesce(try(var.config.default_node_pool.tags, null), local.kube_default.default_node_pool.tags, var.default_node_pool.tags)
+    tags = coalesce(try(var.config.default_node_pool.tags, var.default_node_pool.tags, null), local.kube_default.default_node_pool.tags)
   }
 
   identity {
@@ -118,13 +117,13 @@ resource "azurerm_kubernetes_cluster" "this" {
     utc_offset  = coalesce(try(var.config.maintenance_window_node_os.utc_offset, var.maintenance_window_node_os.utc_offset, null), local.kube_default.maintenance_window_node_os.utc_offset)
   }
   workload_autoscaler_profile {
-    keda_enabled                    = coalesce(try(var.config.workload_autoscaler_profile.keda_enabled, null), var.workload_autoscaler_profile.keda_enabled, local.kube_default.workload_autoscaler_profile.keda_enabled)
-    vertical_pod_autoscaler_enabled = coalesce(try(var.config.workload_autoscaler_profile.vertical_pod_autoscaler_enabled, null), var.workload_autoscaler_profile.vertical_pod_autoscaler_enabled, local.kube_default.workload_autoscaler_profile.vertical_pod_autoscaler_enabled)
+    keda_enabled                    = coalesce(try(var.config.workload_autoscaler_profile.keda_enabled, var.workload_autoscaler_profile.keda_enabled, null), local.kube_default.workload_autoscaler_profile.keda_enabled)
+    vertical_pod_autoscaler_enabled = coalesce(try(var.config.workload_autoscaler_profile.vertical_pod_autoscaler_enabled, var.workload_autoscaler_profile.vertical_pod_autoscaler_enabled, null), local.kube_default.workload_autoscaler_profile.vertical_pod_autoscaler_enabled)
   }
 
   key_vault_secrets_provider {
-    secret_rotation_enabled  = coalesce(try(var.config.key_vault_secrets_provider.secret_rotation_enabled, null), var.key_vault_secrets_provider.secret_rotation_enabled, local.kube_default.key_vault_secrets_provider.secret_rotation_enabled)
-    secret_rotation_interval = coalesce(try(var.config.key_vault_secrets_provider.secret_rotation_interval, null), var.key_vault_secrets_provider.secret_rotation_interval, local.kube_default.key_vault_secrets_provider.secret_rotation_interval)
+    secret_rotation_enabled  = coalesce(try(var.config.key_vault_secrets_provider.secret_rotation_enabled, var.key_vault_secrets_provider.secret_rotation_enabled, null), local.kube_default.key_vault_secrets_provider.secret_rotation_enabled)
+    secret_rotation_interval = coalesce(try(var.config.key_vault_secrets_provider.secret_rotation_interval, var.key_vault_secrets_provider.secret_rotation_interval, null), local.kube_default.key_vault_secrets_provider.secret_rotation_interval)
   }
 
   lifecycle {
