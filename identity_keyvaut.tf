@@ -1,6 +1,6 @@
 locals {
-  keyvault-ns      = "aks-istio-system"
-  keyvault-sa_name = "keyvault"
+  keyvault-ns      = "aks-istio-ingress"
+  keyvault-sa_name = "istio-gateway-certs"
 }
 
 resource "azurerm_user_assigned_identity" "keyvault" {
