@@ -33,3 +33,25 @@ variable "resource_prefix" {
   default = null
 }
 
+variable "node_pools" {
+  type = map(object({
+    name                        = string
+    vm_size                     = string
+    auto_scaling_enabled        = optional(bool, false)
+    max_count                   = optional(number)
+    min_count                   = optional(number)
+    node_count                  = optional(number)
+    max_pods                    = optional(number)
+    tags                        = optional(map(string))
+    zones                       = optional(list(string))
+    temporary_name_for_rotation = optional(string)
+    upgrade_settings = optional(object({
+      drain_timeout_in_minutes      = optional(number)
+      node_soak_duration_in_minutes = optional(number)
+      max_surge                     = string
+    }))
+
+  }))
+  default     = {}
+  description = "Optional. The additional node pools for the Kubernetes cluster."
+}
