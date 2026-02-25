@@ -3,8 +3,12 @@ locals {
   module_defaults = {
 
     identity = {
-      certmanager_identity = "${var.resource_prefix}-${var.instance_name}-aks-certmanagerid"
-      keyvault_identity = "${var.resource_prefix}-${var.instance_name}-aks-keyvaultid"
+      certmanager_identity = {
+        name = "${var.resource_prefix}-${var.instance_name}-aks-certmanagerid"
+      } 
+      keyvault_identity = {
+        name = "${var.resource_prefix}-${var.instance_name}-aks-keyvaultid"
+      }
     }
     kubernetes_cluster = {
       node_resource_group    = try(var.config.node_resource_group_name, replace(var.resource_group_name, "-rg", "-nodes-rg"))
