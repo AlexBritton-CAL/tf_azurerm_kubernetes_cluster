@@ -1,7 +1,7 @@
 locals {
   kube_defaults = local.module_defaults.kubernetes_cluster
 
-  kubernetes_cluster_name = coalesce(try(local.kube_defaults.generate_name, null), try(var.config.generate_name, null), var.generate_name) ? "${var.resource_prefix}-${var.instance_name}-aks" : var.name
+  kubernetes_cluster_name = try(var.config.generate_name, null) ? "${var.resource_prefix}-${var.instance_name}-aks" : coalesce(var.config.name, var.name)
 
   acr_connected = try(var.config.container_registry.name, var.container_registry.name, "") != "" ? 1 : 0
 
