@@ -18,9 +18,9 @@ resource "azurerm_kubernetes_cluster" "this" {
   oidc_issuer_enabled    = coalesce(local.kube_defaults.oidc_issuer_enabled, var.oidc_issuer_enabled)
   local_account_disabled = coalesce(local.kube_defaults.local_account_disabled, var.local_account_disabled)
 
-  private_cluster_enabled    = coalesce(local.kube_defaults.private_cluster_enabled, try(var.private_cluster_enabled, null))
+  private_cluster_enabled    = coalesce(try(var.config.private_cluster_enabled, null), local.kube_defaults.private_cluster_enabled)
   private_dns_zone_id        = local.kube_defaults.private_dns_zone_id
-  dns_prefix_private_cluster = local.kube_defaults.dns_prefix_private_cluster
+  dns_prefix_private_cluster = try(var.config.dns_prefix_private_cluster, local.kube_defaults.dns_prefix_private_cluster)
   dns_prefix                 = local.kube_defaults.private_cluster_enabled ? null : local.kube_defaults.dns_prefix
 
   automatic_upgrade_channel = coalesce(try(var.config.automatic_upgrade_channel, null), var.automatic_upgrade_channel, local.kube_defaults.automatic_upgrade_channel)
