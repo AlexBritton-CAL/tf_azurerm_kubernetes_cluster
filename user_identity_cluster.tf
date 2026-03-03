@@ -3,13 +3,13 @@ locals {
   vnet_resource_group_name = var.global_config.global.spoke.network.virtual_network_resource_group_name
 }
 resource "azurerm_user_assigned_identity" "kubelet_identity" {
-  location            = azurerm_kubernetes_cluster.this.location
+  location            = local.location
   name                = "${local.kubernetes_cluster_name}-kubeletid"
   resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_user_assigned_identity" "cluster_identity" {
-  location            = azurerm_kubernetes_cluster.this.location
+  location            = local.location
   name                = "${local.kubernetes_cluster_name}-clusterid"
   resource_group_name = var.resource_group_name
 }
@@ -22,7 +22,7 @@ resource "azurerm_role_assignment" "cluster_kubelet_id" {
 }
 
 data "azurerm_private_dns_zone" "aks" {
-  name                = "privatelink.${azurerm_kubernetes_cluster.this.location}.azmk8s.io"
+  name                = "privatelink.${local.location}.azmk8s.io"
   resource_group_name = var.global_config.global.privatelink_dns_zones.resource_group_name
   provider            = azurerm.privatelink_dns
 }

@@ -4,7 +4,7 @@ locals {
 }
 
 resource "azurerm_user_assigned_identity" "keyvault" {
-  location            = azurerm_kubernetes_cluster.this.location
+  location            = local.location
   name                = coalesce(try(var.config.identity.keyvault_identity.name, null), local.module_defaults.identity.keyvault_identity.name)
   resource_group_name = var.resource_group_name
 }
