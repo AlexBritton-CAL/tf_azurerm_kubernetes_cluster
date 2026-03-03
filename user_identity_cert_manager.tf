@@ -11,7 +11,6 @@ resource "azurerm_user_assigned_identity" "certmanager" {
 
 resource "azurerm_federated_identity_credential" "certmanager" {
   name                = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.cert-manager-ns}-${local.cert-manager-sa_name}"
-  resource_group_name = var.resource_group_name
   audience            = ["api://AzureADTokenExchange"]
   issuer              = azurerm_kubernetes_cluster.this.oidc_issuer_url
   parent_id           = azurerm_user_assigned_identity.certmanager.id
