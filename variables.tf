@@ -89,7 +89,7 @@ variable "container_registry" {
 variable "maintenance_window_node_os" {
   type = object({
     frequency   = optional(string)
-    interval    = optional(int)
+    interval    = optional(string)
     duration    = optional(number)
     day_of_week = optional(string)
     start_time  = optional(string)
@@ -102,7 +102,7 @@ variable "maintenance_window_node_os" {
 variable "maintenance_window_auto_upgrade" {
   type = object({
     frequency   = optional(string)
-    interval    = optional(int)
+    interval    = optional(string)
     duration    = optional(number)
     day_of_week = optional(string)
     start_time  = optional(string)
@@ -219,3 +219,4 @@ variable "node_pools" {
   default     = {}
   description = "Optional. The additional node pools for the Kubernetes cluster."
 }
+
