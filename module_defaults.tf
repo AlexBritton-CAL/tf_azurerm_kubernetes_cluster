@@ -21,7 +21,7 @@ locals {
       }
 
       private_cluster_enabled    = true
-      private_dns_zone_id        = "/subscriptions/${var.global_config.global.privatelink_dns_zones.subscription_id}/resourceGroups/${var.global_config.global.privatelink_dns_zones.resource_group_name}/providers/Microsoft.Network/privateDnsZones/privatelink.uksouth.azmk8s.io"
+      private_dns_zone_id        = "/subscriptions/${var.global_config.global.privatelink_dns_zones.subscription_id}/resourceGroups/${var.global_config.global.privatelink_dns_zones.resource_group_name}/providers/Microsoft.Network/privateDnsZones/privatelink.${local.location}.azmk8s.io"
       dns_prefix_private_cluster = replace("${var.resource_prefix}-${var.instance_name}-aks", "_", "-")
       dns_prefix                 = replace("${var.resource_prefix}-${var.instance_name}-aks", "_", "-")
 

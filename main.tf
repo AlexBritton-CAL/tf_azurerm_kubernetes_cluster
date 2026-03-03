@@ -1,4 +1,5 @@
 locals {
+  location = coalesce(var.location, null, try(local.module_defaults.kubernetes_cluster.location, null), var.global_config.global.location)
   kube_defaults = local.module_defaults.kubernetes_cluster
 
   kubernetes_cluster_name = try(var.config.generate_name, false) ? "${var.resource_prefix}-${var.instance_name}-aks" : try(var.config.name, var.name)
@@ -12,7 +13,7 @@ data "azurerm_client_config" "this" {}
 
 resource "azurerm_kubernetes_cluster" "this" {
   name                   = local.kubernetes_cluster_name
-  location               = coalesce(var.location, null, try(local.kube_defaults.location, null), var.global_config.global.location)
+  location               = local.location
   resource_group_name    = var.resource_group_name
   node_resource_group    = coalesce(local.kube_defaults.node_resource_group, var.node_resource_group_name)
   oidc_issuer_enabled    = coalesce(local.kube_defaults.oidc_issuer_enabled, var.oidc_issuer_enabled)

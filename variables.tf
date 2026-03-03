@@ -89,7 +89,7 @@ variable "container_registry" {
 variable "maintenance_window_node_os" {
   type = object({
     frequency   = optional(string)
-    interval    = optional(string)
+    interval    = optional(int)
     duration    = optional(number)
     day_of_week = optional(string)
     start_time  = optional(string)
@@ -102,7 +102,7 @@ variable "maintenance_window_node_os" {
 variable "maintenance_window_auto_upgrade" {
   type = object({
     frequency   = optional(string)
-    interval    = optional(string)
+    interval    = optional(int)
     duration    = optional(number)
     day_of_week = optional(string)
     start_time  = optional(string)
@@ -121,7 +121,7 @@ variable "default_node_pool" {
     auto_scaling_enabled         = optional(bool)
     vm_size                      = optional(string)
     temporary_name_for_rotation  = optional(string)
-    only_critical_addons_enabled = optional(string)
+    only_critical_addons_enabled = optional(bool)
     zones                        = optional(list(string))
     vnet_subnet_id               = optional(string)
     node_public_ip_enabled       = optional(bool)
