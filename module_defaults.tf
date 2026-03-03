@@ -5,7 +5,7 @@ locals {
     identity = {
       certmanager_identity = {
         name = "${var.resource_prefix}-${var.instance_name}-aks-certmanagerid"
-      } 
+      }
       keyvault_identity = {
         name = "${var.resource_prefix}-${var.instance_name}-aks-keyvaultid"
       }

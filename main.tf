@@ -1,12 +1,14 @@
 locals {
-  location = coalesce(try(var.location, null), try(var.config.location, null), var.global_config.global.location)
+  location      = coalesce(try(var.location, null), try(var.config.location, null), var.global_config.global.location)
   kube_defaults = local.module_defaults.kubernetes_cluster
 
   kubernetes_cluster_name = try(var.config.generate_name, false) ? "${var.resource_prefix}-${var.instance_name}-aks" : try(var.config.name, var.name)
 
-  acr_connected = try(var.config.container_registry.name, var.container_registry.name, "") != "" ? 1 : 0
+  acr_connected = try(var.config.container_registry.name, null) != null ? 1 : 0
 
-  service_mesh_profile = merge(try(var.config.service_mesh_profile, var.service_mesh_profile, null), local.kube_defaults.service_mesh_profile)
+  service_mesh_profile = merge(try(var.config.service_mesh_profile, null), local.kube_defaults.service_mesh_profile)
+
+  aks_cluster_name = try(var.config.generate_name, false) ? "${var.resource_prefix}-${var.instance_name}-aks" : coalesce(try(var.config.name, null), var.name)
 }
 
 data "azurerm_client_config" "this" {}
@@ -15,16 +17,16 @@ resource "azurerm_kubernetes_cluster" "this" {
   name                   = local.kubernetes_cluster_name
   location               = local.location
   resource_group_name    = var.resource_group_name
-  node_resource_group    = coalesce(local.kube_defaults.node_resource_group, var.node_resource_group_name)
-  oidc_issuer_enabled    = coalesce(local.kube_defaults.oidc_issuer_enabled, var.oidc_issuer_enabled)
-  local_account_disabled = coalesce(local.kube_defaults.local_account_disabled, var.local_account_disabled)
+  node_resource_group    = coalesce(try(var.config.node_resource_group_name, null), local.kube_defaults.node_resource_group)
+  oidc_issuer_enabled    = coalesce(try(var.config.oidc_issuer_enabled, null), local.kube_defaults.oidc_issuer_enabled)
+  local_account_disabled = coalesce(try(var.config.local_account_disabled, null), local.kube_defaults.local_account_disabled)
 
   private_cluster_enabled    = coalesce(try(var.config.private_cluster_enabled, null), local.kube_defaults.private_cluster_enabled)
   private_dns_zone_id        = local.kube_defaults.private_dns_zone_id
-  dns_prefix_private_cluster = try(var.config.dns_prefix_private_cluster, local.kube_defaults.dns_prefix_private_cluster)
-  dns_prefix                 = local.kube_defaults.private_cluster_enabled ? null : local.kube_defaults.dns_prefix
+  dns_prefix_private_cluster = coalesce(try(var.config.dns_prefix_private_cluster, null), local.kube_defaults.dns_prefix_private_cluster)
+  dns_prefix                 = try(var.config.dns_prefix, null) # no default value, as the dns prefix is required for public clusters
 
-  automatic_upgrade_channel = coalesce(try(var.config.automatic_upgrade_channel, null), var.automatic_upgrade_channel, local.kube_defaults.automatic_upgrade_channel)
+  automatic_upgrade_channel = coalesce(try(var.config.automatic_upgrade_channel, null), local.kube_defaults.automatic_upgrade_channel)
   workload_identity_enabled = coalesce(try(var.config.workload_identity_enabled, null), local.kube_defaults.workload_identity_enabled)
 
   azure_active_directory_role_based_access_control {
@@ -37,7 +39,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_plugin_mode = coalesce(try(var.config.network_profile.network_plugin_mode, null), local.kube_defaults.network_profile.network_plugin_mode)
     service_cidr        = coalesce(try(var.config.network_profile.service_cidr, null), local.kube_defaults.network_profile.service_cidr)
     pod_cidr            = coalesce(try(var.config.network_profile.pod_cidr, null), local.kube_defaults.network_profile.pod_cidr)
-    dns_service_ip      = coalesce(try(var.config.network_profile.dns_service_ip,  null), local.kube_defaults.network_profile.dns_service_ip)
+    dns_service_ip      = coalesce(try(var.config.network_profile.dns_service_ip, null), local.kube_defaults.network_profile.dns_service_ip)
     network_data_plane  = coalesce(try(var.config.network_profile.network_data_plane, null), local.kube_defaults.network_profile.network_data_plane)
     network_policy      = coalesce(try(var.config.network_profile.network_policy, null), local.kube_defaults.network_profile.network_policy)
   }
@@ -63,7 +65,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     only_critical_addons_enabled = coalesce(try(var.config.default_node_pool.only_critical_addons_enabled, null), local.kube_defaults.default_node_pool.only_critical_addons_enabled)
     zones                        = coalesce(try(var.config.default_node_pool.zones, null), local.kube_defaults.default_node_pool.zones)
     vnet_subnet_id               = coalesce(try(var.config.default_node_pool.vnet_subnet_id, null), local.kube_defaults.default_node_pool.vnet_subnet_id)
-    node_public_ip_enabled       = coalesce(try(var.config.default_node_pool.node_public_ip_enabled, var.default_node_pool.node_public_ip_enabled, null), local.kube_defaults.default_node_pool.node_public_ip_enabled)
+    node_public_ip_enabled       = coalesce(try(var.config.default_node_pool.node_public_ip_enabled, null), local.kube_defaults.default_node_pool.node_public_ip_enabled)
     upgrade_settings {
       max_surge = coalesce(try(var.config.default_node_pool.upgrade_settings.max_surge, null), local.kube_defaults.default_node_pool.upgrade_settings.max_surge)
     }
@@ -82,7 +84,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   kubernetes_version = local.kube_defaults.kubernetes_version
-  tags               = merge(local.kube_defaults.tags, var.tags)
+  tags               = merge(local.kube_defaults.tags, try(var.config.tags, {}))
 
   maintenance_window_auto_upgrade {
     frequency   = coalesce(try(var.config.maintenance_window_auto_upgrade.frequency, null), local.kube_defaults.maintenance_window_auto_upgrade.frequency)
