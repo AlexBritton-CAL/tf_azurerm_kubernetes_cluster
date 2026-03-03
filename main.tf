@@ -1,5 +1,5 @@
 locals {
-  location = coalesce(var.location, null, try(local.module_defaults.kubernetes_cluster.location, null), var.global_config.global.location)
+  location = coalesce(try(var.location, null), try(var.config.location, null), var.global_config.global.location)
   kube_defaults = local.module_defaults.kubernetes_cluster
 
   kubernetes_cluster_name = try(var.config.generate_name, false) ? "${var.resource_prefix}-${var.instance_name}-aks" : try(var.config.name, var.name)
