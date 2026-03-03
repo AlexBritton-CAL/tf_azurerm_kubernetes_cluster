@@ -1,5 +1,6 @@
 locals {
-  location      = coalesce(try(var.location, null), try(var.config.location, null), var.global_config.global.location)
+  location = coalesce(try(var.location, null), try(var.config.location, null), var.global_config.global.location)
+
   kube_defaults = local.module_defaults.kubernetes_cluster
 
   kubernetes_cluster_name = try(var.config.generate_name, false) ? "${var.resource_prefix}-${var.instance_name}-aks" : try(var.config.name, var.name)
@@ -7,8 +8,6 @@ locals {
   acr_connected = try(var.config.container_registry.name, null) != null ? 1 : 0
 
   service_mesh_profile = merge(try(var.config.service_mesh_profile, null), local.kube_defaults.service_mesh_profile)
-
-  aks_cluster_name = try(var.config.generate_name, false) ? "${var.resource_prefix}-${var.instance_name}-aks" : coalesce(try(var.config.name, null), var.name)
 }
 
 data "azurerm_client_config" "this" {}
@@ -118,6 +117,11 @@ resource "azurerm_kubernetes_cluster" "this" {
       microsoft_defender,
       azure_policy_enabled
     ]
+
+    precondition {
+      condition     = can(regex("^[a-zA-Z0-9]([a-zA-Z0-9\\-_]{0,61}[a-zA-Z0-9])?$", local.kubernetes_cluster_name))
+      error_message = "The name must be between 1 and 63 characters long, alphanumerics, underscores, and hyphens, start and end with alphanumeric, cluster names must be unique within a resource group."
+    }
   }
 }
 

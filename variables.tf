@@ -2,17 +2,6 @@ variable "name" {
   type        = string
   description = "The name of this resource."
   default     = null
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9]([a-zA-Z0-9\\-_]{0,61}[a-zA-Z0-9])?$", var.name))
-    error_message = "The name must be between 1 and 63 characters long and can only contain lowercase letters, numbers and hyphens."
-  }
-}
-
-variable "generate_name" {
-  type        = bool
-  default     = true
-  description = "Whether to generate the name of the resource using the resource prefix and instance name."
 }
 
 variable "config" {
