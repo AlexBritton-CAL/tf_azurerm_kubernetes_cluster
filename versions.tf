@@ -6,5 +6,5 @@ terraform {
       configuration_aliases = [azurerm.privatelink_dns, azurerm.public_dns, azurerm.private_dns]
     }
   }
-  required_version = ">= 1.1.0"
+  required_version = ">= 1.14.0"
 }
