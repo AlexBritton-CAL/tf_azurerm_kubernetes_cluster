@@ -34,7 +34,7 @@ data "azurerm_virtual_network" "this" {
 
 resource "azurerm_role_assignment" "cluster_vnet" { # Required to deploy istio internal load balancer
   principal_id                     = azurerm_user_assigned_identity.cluster_identity.principal_id
-  role_definition_name             = "Contributor"
+  role_definition_name             = "Network Contributor"
   scope                            = data.azurerm_virtual_network.this.id
   skip_service_principal_aad_check = true
 }

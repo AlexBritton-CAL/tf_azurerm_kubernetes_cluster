@@ -46,10 +46,10 @@ resource "azurerm_kubernetes_cluster" "this" {
   dynamic "service_mesh_profile" {
     for_each = local.service_mesh_profile.mode == "Istio" ? [1] : []
     content {
-      mode                             = local.service_mesh_profile.mode
-      internal_ingress_gateway_enabled = local.service_mesh_profile.internal_ingress_gateway_enabled
-      external_ingress_gateway_enabled = local.service_mesh_profile.external_ingress_gateway_enabled
-      revisions                        = local.service_mesh_profile.revisions
+      mode                             = coalesce(try(var.config.service_mesh_profile.mode, null), local.kube_defaults.service_mesh_profile.mode)
+      internal_ingress_gateway_enabled = coalesce(try(var.config.service_mesh_profile.internal_ingress_gateway_enabled, null), local.kube_defaults.service_mesh_profile.internal_ingress_gateway_enabled)
+      external_ingress_gateway_enabled = coalesce(try(var.config.service_mesh_profile.external_ingress_gateway_enabled, null), local.kube_defaults.service_mesh_profile.external_ingress_gateway_enabled)
+      revisions                        = coalesce(try(var.config.service_mesh_profile.revisions, null), local.kube_defaults.service_mesh_profile.revisions)
     }
   }
 
