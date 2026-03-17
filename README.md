@@ -32,10 +32,10 @@ module "azurerm_kubernetes_cluster" {
     azurerm.private_dns      = azurerm.private_dns
   }
 
-  resource_group_name = module.layer.resource_group_name
-  instance_name       = module.layer.instance_name
-  resource_prefix     = module.layer.resource_prefix
-  global_config       = module.layer.global_config
+  resource_group_name = local.resource_group_name
+  instance_name       = local.instance_name
+  resource_prefix     = local.resource_prefix
+  global_config       = local.global_config
   config              = each.value
 }
 ```

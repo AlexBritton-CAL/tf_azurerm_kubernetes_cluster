@@ -9,6 +9,9 @@ locals {
       keyvault_identity = {
         name = "${var.resource_prefix}-${var.instance_name}-aks-keyvaultid"
       }
+      crossplane_identity = {
+        name = "${var.resource_prefix}-${var.instance_name}-aks-crossplaneid"
+      }
     }
     kubernetes_cluster = {
       node_resource_group    = try(var.config.node_resource_group_name, replace(var.resource_group_name, "-rg", "-nodes-rg"))
@@ -77,10 +80,7 @@ locals {
 
       kubernetes_version = null # Use latest stable version (null = Azure default)
 
-      tags = {
-        ModuleTag = "ModuleValue"
-        ManagedBy = "Module_Defaults"
-      }
+      tags = {}
 
       maintenance_window_auto_upgrade = {
         frequency   = "Weekly"
