@@ -39,7 +39,7 @@ resource "azurerm_role_assignment" "certmanager_public_dns" {
   count = local.cert-manager-enabled ? 1 : 0
   principal_id                     = azurerm_user_assigned_identity.certmanager[0].principal_id
   role_definition_name             = "DNS Zone Contributor"
-  scope                            = data.azurerm_dns_zone.public_dns_zone.id
+  scope                            = data.azurerm_dns_zone.public_dns_zone[0].id
   skip_service_principal_aad_check = true
 }
 
@@ -47,6 +47,6 @@ resource "azurerm_role_assignment" "certmanager_shadow_private_dns" {
   count = local.cert-manager-enabled ? 1 : 0
   principal_id                     = azurerm_user_assigned_identity.certmanager[0].principal_id
   role_definition_name             = "DNS Zone Contributor"
-  scope                            = data.azurerm_dns_zone.shadow_private_dns_zone.id
+  scope                            = data.azurerm_dns_zone.shadow_private_dns_zone[0].id
   skip_service_principal_aad_check = true
 }

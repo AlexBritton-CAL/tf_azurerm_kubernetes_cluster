@@ -31,8 +31,8 @@ output "kubelet_identity" {
 output "certmanager_identity" {
   description = "The cert-manager managed identity."
   value = {
-    principal_id = azurerm_user_assigned_identity.certmanager.principal_id
-    client_id    = azurerm_user_assigned_identity.certmanager.client_id
+    principal_id = azurerm_user_assigned_identity.certmanager[*].principal_id
+    client_id    = azurerm_user_assigned_identity.certmanager[*].client_id
   }
 }
 
