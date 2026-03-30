@@ -47,7 +47,7 @@ output "keyvault_identity" {
 output "crossplane_identity" {
   description = "The Crossplane managed identity."
   value = {
-    principal_id = azurerm_user_assigned_identity.crossplane.principal_id
-    client_id    = azurerm_user_assigned_identity.crossplane.client_id
+    principal_id = azurerm_user_assigned_identity.crossplane[*].principal_id
+    client_id    = azurerm_user_assigned_identity.crossplane[*].client_id
   }
 }
