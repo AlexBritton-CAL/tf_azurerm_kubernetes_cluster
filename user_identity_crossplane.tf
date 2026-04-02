@@ -24,6 +24,6 @@ resource "azurerm_role_assignment" "crossplane_subscrption_contributor" {
   count = local.crossplane-enabled ? 1 : 0
   principal_id                     = azurerm_user_assigned_identity.crossplane[0].principal_id
   role_definition_name             = "Custom Role - Domain Runner"
-  scope                            = var.global_config.global.subscription_id
+  scope                            = "/subscriptions/${var.global_config.global.subscription_id}"
   skip_service_principal_aad_check = true
 }
