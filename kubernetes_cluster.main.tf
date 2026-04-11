@@ -116,7 +116,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     ignore_changes = [
       microsoft_defender,
       azure_policy_enabled,
-      service_mesh_profile.revisions
+      service_mesh_profile[0].revisions
     ]
 
     precondition {
