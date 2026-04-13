@@ -18,8 +18,8 @@ locals {
 
       node_public_ip_enabled = false
 
-      vnet_subnet_id = "${local.cluster_vnet_subnet_id_prefix}aks-snet"
-
+      vnet_subnet_id = "${local.cluster_vnet_subnet_id_prefix}${try(var.config.vnet_subnet_name, "aks-snet")}"
+      
       upgrade_settings = {
         drain_timeout_in_minutes      = 0
         max_surge                     = "10%"
