@@ -99,7 +99,8 @@ azurerm_kubernetes_cluster:
       auto_scaling_enabled: true
       only_critical_addons_enabled: true
       zones: ["1", "2", "3"]
-      vnet_subnet_id: /subscriptions/.../subnets/aks-snet
+      vnet_subnet_name: aks-snet                # subnet name within the spoke VNet; module builds the full ID (default: aks-snet)
+      # vnet_subnet_id: /subscriptions/.../subnets/aks-snet  # alternative: supply the full resource ID directly
       node_public_ip_enabled: false
       temporary_name_for_rotation: systemtemp
       tags: {}
@@ -149,7 +150,8 @@ azurerm_kubernetes_cluster:
         auto_scaling_enabled: true
         max_pods: 50
         zones: ["1", "2", "3"]
-        vnet_subnet_id: /subscriptions/.../subnets/aks-snet
+        vnet_subnet_name: aks-snet                # subnet name within the spoke VNet; module builds the full ID (default: aks-snet)
+        # vnet_subnet_id: /subscriptions/.../subnets/aks-snet  # alternative: supply the full resource ID directly
         node_public_ip_enabled: false
         temporary_name_for_rotation: workloadtemp
         tags: {}
@@ -170,6 +172,17 @@ azurerm_kubernetes_cluster:
 | `instance_name` | Instance name used for name generation | `string` | No |
 | `resource_prefix` | Prefix used for name generation | `string` | No |
 | `location` | Azure region. Falls back to `global_config.global.location` | `string` | No |
+
+### Subnet configuration
+
+Each node pool (default and additional) supports two mutually exclusive ways to specify the subnet:
+
+| Field | Description | Default |
+|---|---|---|
+| `vnet_subnet_name` | Subnet name within the spoke VNet defined in `global_config`. The module constructs the full resource ID automatically. | `aks-snet` |
+| `vnet_subnet_id` | Full Azure subnet resource ID. Use this when the subnet lives outside the spoke VNet or when you need explicit control over the ID. | — |
+
+`vnet_subnet_name` takes precedence in the defaults resolution; supply `vnet_subnet_id` directly in `config` to override it completely.
 
 ## Outputs
 
