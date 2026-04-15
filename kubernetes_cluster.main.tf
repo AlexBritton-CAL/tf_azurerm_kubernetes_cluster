@@ -115,7 +115,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   lifecycle {
     ignore_changes = [
       microsoft_defender,
-      azure_policy_enabled
+      azure_policy_enabled,
+      service_mesh_profile[0].revisions
     ]
 
     precondition {
@@ -162,12 +163,14 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
   }
 }
 
-resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
-  name                = "*"
-  zone_name           = var.global_config.global.private_dns_zone.name
-  resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
-  ttl                 = 300
-  records             = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].private_ip_address]
-  provider            = azurerm.private_dns
-}
+# FIX ME: This is a workaround to create an A record for the internal load balancer in the private DNS zone, as AKS does not automatically create this record for private clusters, which breaks connectivity to the cluster.
+# This should be removed once this is supported natively by AKS.
+# resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
+#   name                = "*"
+#   zone_name           = var.global_config.global.private_dns_zone.name
+#   resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
+#   ttl                 = 300
+#   records             = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].private_ip_address]
+#   provider            = azurerm.private_dns
+# }
 

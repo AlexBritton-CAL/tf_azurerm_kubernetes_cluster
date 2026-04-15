@@ -46,7 +46,7 @@ locals {
         mode                             = "Istio"
         internal_ingress_gateway_enabled = true
         external_ingress_gateway_enabled = false
-        revisions                        = ["asm-1-25"]
+        revisions                        = ["asm-1-27"]
       }
 
       default_node_pool = {
@@ -59,7 +59,7 @@ locals {
         temporary_name_for_rotation  = "systemtemp"
         only_critical_addons_enabled = true
         zones                        = ["1", "2", "3"] # Deploy across availability zones
-        vnet_subnet_id               = "${local.cluster_vnet_subnet_id_prefix}aks-snet"
+        vnet_subnet_id               = "${local.cluster_vnet_subnet_id_prefix}${try(var.config.default_node_pool.vnet_subnet_name, "aks-snet")}"
         node_public_ip_enabled       = false
 
         upgrade_settings = {
