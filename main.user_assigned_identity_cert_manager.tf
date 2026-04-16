@@ -17,7 +17,6 @@ resource "azurerm_federated_identity_credential" "certmanager" {
   subject             = "system:serviceaccount:${local.cert-manager-ns}:${local.cert-manager-sa_name}"
 }
 
-# FIX ME: Runners need to be able to assign these DNS roles to the identity
 data "azurerm_dns_zone" "public_dns_zone" {
   name                = var.global_config.global.public_dns_zone.name
   resource_group_name = var.global_config.global.public_dns_zone.resource_group_name
@@ -25,6 +24,7 @@ data "azurerm_dns_zone" "public_dns_zone" {
 }
 
 data "azurerm_dns_zone" "shadow_private_dns_zone" {
+  count               = try(var.global_config.global.shadow_private_dns_zone, null) != null ? 1 : 0
   name                = var.global_config.global.shadow_private_dns_zone.name
   resource_group_name = var.global_config.global.shadow_private_dns_zone.resource_group_name
   provider            = azurerm.public_dns
@@ -38,8 +38,9 @@ resource "azurerm_role_assignment" "certmanager_public_dns" {
 }
 
 resource "azurerm_role_assignment" "certmanager_shadow_private_dns" {
+  count                            = try(var.global_config.global.shadow_private_dns_zone, null) != null ? 1 : 0
   principal_id                     = azurerm_user_assigned_identity.certmanager.principal_id
   role_definition_name             = "DNS Zone Contributor"
-  scope                            = data.azurerm_dns_zone.shadow_private_dns_zone.id
+  scope                            = data.azurerm_dns_zone.shadow_private_dns_zone[0].id
   skip_service_principal_aad_check = true
 }
