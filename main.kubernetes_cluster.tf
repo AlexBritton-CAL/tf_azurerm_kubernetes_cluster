@@ -7,7 +7,7 @@ locals {
 
   acr_connected = try(var.config.container_registry.name, null) != null ? 1 : 0
 
-  service_mesh_profile = merge(local.kube_defaults.service_mesh_profile, try(var.config.service_mesh_profile, null)) # enable istio unless overridden by config
+  # service_mesh_profile = merge(local.kube_defaults.service_mesh_profile, try(var.config.service_mesh_profile, null)) # enable istio unless overridden by config
 }
 
 data "azurerm_client_config" "this" {}
@@ -44,7 +44,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   dynamic "service_mesh_profile" {
-    for_each = local.service_mesh_profile.mode == "Istio" ? [1] : []
+    for_each = local.service_mesh_profile.enabled != "false" ? [1] : []
     content {
       mode                             = coalesce(try(var.config.service_mesh_profile.mode, null), local.kube_defaults.service_mesh_profile.mode)
       internal_ingress_gateway_enabled = coalesce(try(var.config.service_mesh_profile.internal_ingress_gateway_enabled, null), local.kube_defaults.service_mesh_profile.internal_ingress_gateway_enabled)
