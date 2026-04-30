@@ -44,7 +44,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   dynamic "service_mesh_profile" {
-    for_each = local.service_mesh_profile.enabled != "false" ? [1] : []
+    for_each = local.service_mesh_profile.enabled == "false" ? [] : [1]
     content {
       mode                             = coalesce(try(var.config.service_mesh_profile.mode, null), local.kube_defaults.service_mesh_profile.mode)
       internal_ingress_gateway_enabled = coalesce(try(var.config.service_mesh_profile.internal_ingress_gateway_enabled, null), local.kube_defaults.service_mesh_profile.internal_ingress_gateway_enabled)
