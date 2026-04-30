@@ -7,7 +7,7 @@ locals {
 
   acr_connected = try(var.config.container_registry.name, null) != null ? 1 : 0
 
-  service_mesh_profile = merge(try(var.config.service_mesh_profile, null), local.kube_defaults.service_mesh_profile)
+  service_mesh_profile = merge(local.kube_defaults.service_mesh_profile, try(var.config.service_mesh_profile, null)) # enable istio unless overridden by config
 }
 
 data "azurerm_client_config" "this" {}
@@ -164,10 +164,12 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
 
 resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
   name                = "*"
-  zone_name           = var.global_config.global.private_dns_zone.name
-  resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
+  zone_name           = coalesce(try(var.config.private_dns_zone.name, null), var.global_config.global.private_dns_zone.name)
+  resource_group_name = coalesce(try(var.config.private_dns_zone.resource_group_name, null), var.global_config.global.private_dns_zone.resource_group_name)
   ttl                 = 300
   records             = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].private_ip_address]
   provider            = azurerm.private_dns
 }
+
+
 
