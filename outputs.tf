@@ -33,13 +33,13 @@ output "kubernetes_cluster_kubelet_identity" {
   }
 }
 
-output "kubernetes_cluster_certmanager_identity" {
-  description = "The cert-manager managed identity."
-  value = {
-    principal_id = azurerm_user_assigned_identity.certmanager.principal_id
-    client_id    = azurerm_user_assigned_identity.certmanager.client_id
-  }
-}
+# output "kubernetes_cluster_certmanager_identity" {
+#   description = "The cert-manager managed identity."
+#   value = {
+#     principal_id = azurerm_user_assigned_identity.certmanager.principal_id
+#     client_id    = azurerm_user_assigned_identity.certmanager.client_id
+#   }
+# }
 
 output "kubernetes_cluster_keyvault_identity" {
   description = "The Istio ingress gateway Key Vault managed identity."
