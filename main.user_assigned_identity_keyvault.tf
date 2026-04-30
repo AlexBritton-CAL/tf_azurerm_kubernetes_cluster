@@ -10,7 +10,7 @@ locals {
 }
 
 resource "azurerm_federated_identity_credential" "keyvault" {
-  count               = local.service_mesh_profile == "Istio" ? 1 : 0
+  count               = local.service_mesh_profile.enabled != "false" ? 0 : 1
   name                = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.keyvault-ns}-${local.keyvault-sa_name}"
   audience            = ["api://AzureADTokenExchange"]
   issuer              = azurerm_kubernetes_cluster.this.oidc_issuer_url
