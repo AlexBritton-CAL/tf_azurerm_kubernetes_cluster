@@ -145,6 +145,7 @@ data "azurerm_lb" "kubernetes_internal" {
 }
 
 resource "azurerm_private_link_service" "aks_lb_privatelink" {
+  count = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
   name                = local.kube_defaults.private_link_service.name
   resource_group_name = azurerm_kubernetes_cluster.this.resource_group_name
   location            = local.location
@@ -164,6 +165,7 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
 }
 
 resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
+  count = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
   name                = "*"
   zone_name           = coalesce(try(var.config.private_dns_zone.name, null), var.global_config.global.private_dns_zone.name)
   resource_group_name = coalesce(try(var.config.private_dns_zone.resource_group_name, null), var.global_config.global.private_dns_zone.resource_group_name)
