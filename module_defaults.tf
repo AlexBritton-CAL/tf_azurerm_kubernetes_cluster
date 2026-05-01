@@ -46,7 +46,7 @@ locals {
         mode                             = "Istio"
         internal_ingress_gateway_enabled = true
         external_ingress_gateway_enabled = false
-        revisions                        = ["asm-1-25"]
+        revisions                        = ["asm-1-27"]
       }
 
       default_node_pool = {
