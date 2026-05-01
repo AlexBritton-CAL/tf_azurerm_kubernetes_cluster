@@ -15,6 +15,6 @@ resource "azurerm_federated_identity_credential" "crossplane" {
   name       = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.crossplane-ns}-${local.crossplane-sa_name}"
   audience   = ["api://AzureADTokenExchange"]
   issuer     = azurerm_kubernetes_cluster.this.oidc_issuer_url
-  parent_id  = azurerm_user_assigned_identity.crossplane[0].id
+  parent_id  = azurerm_user_assigned_identity.crossplane[count.index]
   subject    = "system:serviceaccount:${local.crossplane-ns}:${local.crossplane-sa_name}"
 }
