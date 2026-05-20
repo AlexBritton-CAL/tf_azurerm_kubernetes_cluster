@@ -30,6 +30,8 @@ locals {
 
       automatic_upgrade_channel = "stable"
 
+      azure_policy_enabled = true
+
       workload_identity_enabled = true
 
       network_profile = {
