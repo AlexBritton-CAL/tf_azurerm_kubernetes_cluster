@@ -35,6 +35,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   network_profile {
+    outbound_type       = coalesce(try(var.config.network_profile.outbound_type, null), local.kube_defaults.network_profile.outbound_type)
     network_plugin      = coalesce(try(var.config.network_profile.network_plugin, null), local.kube_defaults.network_profile.network_plugin)
     network_plugin_mode = coalesce(try(var.config.network_profile.network_plugin_mode, null), local.kube_defaults.network_profile.network_plugin_mode)
     service_cidr        = coalesce(try(var.config.network_profile.service_cidr, null), local.kube_defaults.network_profile.service_cidr)
