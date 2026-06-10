@@ -7,7 +7,7 @@ locals {
 
   acr_connected = try(var.config.container_registry.name, null) != null ? 1 : 0
 
-  service_mesh_profile = merge(try(var.config.service_mesh_profile, null), local.kube_defaults.service_mesh_profile)
+  # service_mesh_profile = merge(local.kube_defaults.service_mesh_profile, try(var.config.service_mesh_profile, null)) # enable istio unless overridden by config
 }
 
 data "azurerm_client_config" "this" {}
@@ -27,6 +27,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   automatic_upgrade_channel = coalesce(try(var.config.automatic_upgrade_channel, null), local.kube_defaults.automatic_upgrade_channel)
   workload_identity_enabled = coalesce(try(var.config.workload_identity_enabled, null), local.kube_defaults.workload_identity_enabled)
+  azure_policy_enabled = coalesce(try(var.config.azure_policy_enabled, null), local.kube_defaults.azure_policy_enabled)
 
   azure_active_directory_role_based_access_control {
     azure_rbac_enabled = coalesce(try(var.config.azure_active_directory_role_based_access_control.azure_rbac_enabled, null), local.kube_defaults.azure_active_directory_role_based_access_control.azure_rbac_enabled)
@@ -34,6 +35,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   network_profile {
+    outbound_type       = coalesce(try(var.config.network_profile.outbound_type, null), local.kube_defaults.network_profile.outbound_type)
     network_plugin      = coalesce(try(var.config.network_profile.network_plugin, null), local.kube_defaults.network_profile.network_plugin)
     network_plugin_mode = coalesce(try(var.config.network_profile.network_plugin_mode, null), local.kube_defaults.network_profile.network_plugin_mode)
     service_cidr        = coalesce(try(var.config.network_profile.service_cidr, null), local.kube_defaults.network_profile.service_cidr)
@@ -44,7 +46,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   dynamic "service_mesh_profile" {
-    for_each = local.service_mesh_profile.mode == "Istio" ? [1] : []
+    for_each = try(var.config.service_mesh_profile.enabled, true) == false ? [] : [1]
     content {
       mode                             = coalesce(try(var.config.service_mesh_profile.mode, null), local.kube_defaults.service_mesh_profile.mode)
       internal_ingress_gateway_enabled = coalesce(try(var.config.service_mesh_profile.internal_ingress_gateway_enabled, null), local.kube_defaults.service_mesh_profile.internal_ingress_gateway_enabled)
@@ -136,6 +138,7 @@ module "azurerm_kubernetes_cluster_node_pool" {
 }
 
 data "azurerm_lb" "kubernetes_internal" {
+  count = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
   name                = "kubernetes-internal"
   resource_group_name = regex("[^/]+$", azurerm_kubernetes_cluster.this.node_resource_group_id)
 
@@ -145,13 +148,14 @@ data "azurerm_lb" "kubernetes_internal" {
 }
 
 resource "azurerm_private_link_service" "aks_lb_privatelink" {
+  count = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
   name                = local.kube_defaults.private_link_service.name
   resource_group_name = azurerm_kubernetes_cluster.this.resource_group_name
   location            = local.location
 
   # auto_approval_subscription_ids              = ["00000000-0000-0000-0000-000000000000"]
   # visibility_subscription_ids                 = ["00000000-0000-0000-0000-000000000000"]
-  load_balancer_frontend_ip_configuration_ids = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].id]
+  load_balancer_frontend_ip_configuration_ids = [data.azurerm_lb.kubernetes_internal[0].frontend_ip_configuration[0].id]
 
   nat_ip_configuration {
     name      = "primary"
@@ -163,14 +167,15 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
   }
 }
 
-# FIX ME: This is a workaround to create an A record for the internal load balancer in the private DNS zone, as AKS does not automatically create this record for private clusters, which breaks connectivity to the cluster.
-# This should be removed once this is supported natively by AKS.
-# resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
-#   name                = "*"
-#   zone_name           = var.global_config.global.private_dns_zone.name
-#   resource_group_name = var.global_config.global.private_dns_zone.resource_group_name
-#   ttl                 = 300
-#   records             = [data.azurerm_lb.kubernetes_internal.frontend_ip_configuration[0].private_ip_address]
-#   provider            = azurerm.private_dns
-# }
+resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
+  count = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
+  name                = "*"
+  zone_name           = coalesce(try(var.config.private_dns_zone.name, null), var.global_config.global.private_dns_zone.name)
+  resource_group_name = coalesce(try(var.config.private_dns_zone.resource_group_name, null), var.global_config.global.private_dns_zone.resource_group_name)
+  ttl                 = 300
+  records             = [data.azurerm_lb.kubernetes_internal[0].frontend_ip_configuration[0].private_ip_address]
+  provider            = azurerm.private_dns
+}
+
+
 

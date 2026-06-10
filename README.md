@@ -188,9 +188,15 @@ Each node pool (default and additional) supports two mutually exclusive ways to 
 
 | Name | Description |
 |---|---|
-| `cluster_name` | The name of the AKS cluster |
-| `oidc_issuer_url` | The OIDC issuer URL for workload identity federation |
-| `kubernetes_cluster` | The resolved module defaults object |
+| `kubernetes_cluster_id` | The ID of the AKS cluster |
+| `kubernetes_cluster_name` | The name of the AKS cluster |
+| `kubernetes_cluster_oidc_issuer_url` | The OIDC issuer URL for workload identity federation |
+| `kubernetes_cluster_defaults` | The resolved module defaults object |
+| `kubernetes_cluster_cluster_identity` | Principal ID and client ID of the cluster control plane managed identity |
+| `kubernetes_cluster_kubelet_identity` | Principal ID and client ID of the kubelet managed identity |
+| `kubernetes_cluster_certmanager_identity` | Principal ID and client ID of the cert-manager managed identity |
+| `kubernetes_cluster_keyvault_identity` | Principal ID and client ID of the Istio ingress gateway Key Vault managed identity |
+| `kubernetes_cluster_crossplane_identity` | Principal ID and client ID of the Crossplane managed identity |
 
 ## Security defaults
 
@@ -216,8 +222,8 @@ Each node pool (default and additional) supports two mutually exclusive ways to 
 
 | Name | Version |
 |---|---|
-| Terraform | `>= 1.1.0` |
-| hashicorp/azurerm | `~> 4.58.0` |
+| Terraform | `>= 1.14.0` |
+| hashicorp/azurerm | `~> 4.62.1` |
 
 ### Required provider aliases
 

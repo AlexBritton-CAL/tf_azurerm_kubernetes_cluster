@@ -30,9 +30,14 @@ locals {
 
       automatic_upgrade_channel = "stable"
 
+      azure_policy_enabled = true
+
       workload_identity_enabled = true
 
+      
+
       network_profile = {
+        outbound_type       = "userDefinedRouting"
         network_plugin      = "azure"
         network_plugin_mode = "overlay"
         service_cidr        = "10.0.11.0/24"

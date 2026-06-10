@@ -1,15 +1,16 @@
-locals {
-  keyvault-ns      = "aks-istio-ingress"
-  keyvault-sa_name = "istio-gateway-certs"
-}
-
 resource "azurerm_user_assigned_identity" "keyvault" {
   location            = local.location
   name                = coalesce(try(var.config.identity.keyvault_identity.name, null), local.module_defaults.identity.keyvault_identity.name)
   resource_group_name = var.resource_group_name
 }
 
+locals {
+  keyvault-ns      = "aks-istio-ingress"
+  keyvault-sa_name = "istio-gateway-certs"
+}
+
 resource "azurerm_federated_identity_credential" "keyvault" {
+  count               = try(var.config.service_mesh_profile.enabled, null) == "skip" ? 0 : 1
   name                = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.keyvault-ns}-${local.keyvault-sa_name}"
   audience            = ["api://AzureADTokenExchange"]
   issuer              = azurerm_kubernetes_cluster.this.oidc_issuer_url
