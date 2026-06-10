@@ -37,7 +37,7 @@ locals {
       
 
       network_profile = {
-        outbound_type = "userDefinedRouting"
+        outbound_type       = "userDefinedRouting"
         network_plugin      = "azure"
         network_plugin_mode = "overlay"
         service_cidr        = "10.0.11.0/24"
