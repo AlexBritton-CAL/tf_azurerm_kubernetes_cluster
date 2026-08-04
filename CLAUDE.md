@@ -43,7 +43,7 @@ Values are resolved with `coalesce(try(var.config.<attr>, null), local.module_de
 | `main.tf` | `azurerm_kubernetes_cluster`, `azurerm_private_link_service`, `azurerm_private_dns_a_record`, and the `cluster_node_pool` module calls |
 | `module_defaults.tf` | Opinionated defaults for every cluster attribute, vnet subnet ID helpers |
 | `variables.tf` | All input variables; top-level vars act as fallbacks when `var.config` isn't used |
-| `versions.tf` | Provider version pins (`azurerm ~> 4.58.0`, Terraform `>= 1.1.0`) |
+| `versions.tf` | Provider version pins (`azurerm ~> 4.81.0`, Terraform `>= 1.1.0`) |
 | `identity_cluster.tf` | `cluster_identity` and `kubelet_identity` user-assigned managed identities, plus role assignments (Managed Identity Operator, Contributor on VNet, Private DNS Zone Contributor) |
 | `identity_cert_manager.tf` | Managed identity + federated credential for cert-manager workload identity; DNS Zone Contributor role assignments for public and shadow-private DNS zones |
 | `identity_keyvaut.tf` | Managed identity + federated credential for the Istio ingress gateway to read Key Vault certificates; Key Vault Certificate User role assignment |
@@ -64,7 +64,7 @@ Three provider aliases are required by the consuming configuration:
 ### Key Defaults (from `module_defaults.tf`)
 
 - **Network**: Azure CNI overlay, Cilium data plane + policy, service CIDR `10.0.11.0/24`, pod CIDR `10.244.0.0/16`
-- **Service mesh**: Istio (`asm-1-25`) with internal ingress gateway enabled
+- **Service mesh**: Istio (`asm-1-27`) with internal ingress gateway enabled
 - **Cluster identity**: `UserAssigned`
 - **Default node pool**: `Standard_B4s_v2`, autoscaling 2–5, system-only (`only_critical_addons_enabled = true`), across zones 1/2/3
 - **Additional node pools**: `Standard_B4ms`, autoscaling 1–4, max 50 pods, across zones 1/2/3

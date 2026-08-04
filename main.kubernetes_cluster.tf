@@ -3,11 +3,11 @@ locals {
 
   kube_defaults = local.module_defaults.kubernetes_cluster
 
-  kubernetes_cluster_name = try(var.config.generate_name, false) ? "${var.resource_prefix}-${var.instance_name}-aks" : try(var.config.name, var.name)
+  kubernetes_cluster_name = try(var.config.generate_name, false) ? "${var.resource_prefix}-${var.instance_name}-aks" : try(coalesce(try(var.name, null), try(var.config.name, null)), null)
 
   acr_connected = try(var.config.container_registry.name, null) != null ? 1 : 0
 
-  # service_mesh_profile = merge(local.kube_defaults.service_mesh_profile, try(var.config.service_mesh_profile, null)) # enable istio unless overridden by config
+  service_mesh_enabled = try(var.config.service_mesh_profile.enabled, true) != false
 }
 
 data "azurerm_client_config" "this" {}
@@ -46,7 +46,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   dynamic "service_mesh_profile" {
-    for_each = try(var.config.service_mesh_profile.enabled, true) == false ? [] : [1]
+    for_each = local.service_mesh_enabled ? [1] : []
     content {
       mode                             = coalesce(try(var.config.service_mesh_profile.mode, null), local.kube_defaults.service_mesh_profile.mode)
       internal_ingress_gateway_enabled = coalesce(try(var.config.service_mesh_profile.internal_ingress_gateway_enabled, null), local.kube_defaults.service_mesh_profile.internal_ingress_gateway_enabled)
@@ -122,6 +122,11 @@ resource "azurerm_kubernetes_cluster" "this" {
     ]
 
     precondition {
+      condition     = local.kubernetes_cluster_name != null
+      error_message = "Set config.generate_name = true, or supply a name via var.name or config.name."
+    }
+
+    precondition {
       condition     = can(regex("^[a-zA-Z0-9]([a-zA-Z0-9\\-_]{0,61}[a-zA-Z0-9])?$", local.kubernetes_cluster_name))
       error_message = "The name must be between 1 and 63 characters long, alphanumerics, underscores, and hyphens, start and end with alphanumeric, cluster names must be unique within a resource group."
     }
@@ -138,7 +143,7 @@ module "azurerm_kubernetes_cluster_node_pool" {
 }
 
 data "azurerm_lb" "kubernetes_internal" {
-  count               = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
+  count               = local.service_mesh_enabled ? 1 : 0
   name                = "kubernetes-internal"
   resource_group_name = regex("[^/]+$", azurerm_kubernetes_cluster.this.node_resource_group_id)
 
@@ -148,7 +153,7 @@ data "azurerm_lb" "kubernetes_internal" {
 }
 
 resource "azurerm_private_link_service" "aks_lb_privatelink" {
-  count               = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
+  count               = local.service_mesh_enabled ? 1 : 0
   name                = local.kube_defaults.private_link_service.name
   resource_group_name = azurerm_kubernetes_cluster.this.resource_group_name
   location            = local.location
@@ -168,7 +173,7 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
 }
 
 resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
-  count               = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
+  count               = local.service_mesh_enabled ? 1 : 0
   name                = "*"
   zone_name           = coalesce(try(var.config.private_dns_zone.name, null), var.global_config.global.private_dns_zone.name)
   resource_group_name = coalesce(try(var.config.private_dns_zone.resource_group_name, null), var.global_config.global.private_dns_zone.resource_group_name)
