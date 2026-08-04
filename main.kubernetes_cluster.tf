@@ -27,7 +27,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   automatic_upgrade_channel = coalesce(try(var.config.automatic_upgrade_channel, null), local.kube_defaults.automatic_upgrade_channel)
   workload_identity_enabled = coalesce(try(var.config.workload_identity_enabled, null), local.kube_defaults.workload_identity_enabled)
-  azure_policy_enabled = coalesce(try(var.config.azure_policy_enabled, null), local.kube_defaults.azure_policy_enabled)
+  azure_policy_enabled      = coalesce(try(var.config.azure_policy_enabled, null), local.kube_defaults.azure_policy_enabled)
 
   azure_active_directory_role_based_access_control {
     azure_rbac_enabled = coalesce(try(var.config.azure_active_directory_role_based_access_control.azure_rbac_enabled, null), local.kube_defaults.azure_active_directory_role_based_access_control.azure_rbac_enabled)
@@ -138,7 +138,7 @@ module "azurerm_kubernetes_cluster_node_pool" {
 }
 
 data "azurerm_lb" "kubernetes_internal" {
-  count = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
+  count               = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
   name                = "kubernetes-internal"
   resource_group_name = regex("[^/]+$", azurerm_kubernetes_cluster.this.node_resource_group_id)
 
@@ -148,7 +148,7 @@ data "azurerm_lb" "kubernetes_internal" {
 }
 
 resource "azurerm_private_link_service" "aks_lb_privatelink" {
-  count = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
+  count               = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
   name                = local.kube_defaults.private_link_service.name
   resource_group_name = azurerm_kubernetes_cluster.this.resource_group_name
   location            = local.location
@@ -168,7 +168,7 @@ resource "azurerm_private_link_service" "aks_lb_privatelink" {
 }
 
 resource "azurerm_private_dns_a_record" "load_balancer_a_record" {
-  count = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
+  count               = try(var.config.service_mesh_profile.enabled, true) == false ? 0 : 1
   name                = "*"
   zone_name           = coalesce(try(var.config.private_dns_zone.name, null), var.global_config.global.private_dns_zone.name)
   resource_group_name = coalesce(try(var.config.private_dns_zone.resource_group_name, null), var.global_config.global.private_dns_zone.resource_group_name)

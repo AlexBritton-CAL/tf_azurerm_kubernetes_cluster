@@ -10,12 +10,12 @@ locals {
 }
 
 resource "azurerm_federated_identity_credential" "keyvault" {
-  count                        = try(var.config.service_mesh_profile.enabled, null) == "skip" ? 0 : 1
-  name                         = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.keyvault-ns}-${local.keyvault-sa_name}"
-  audience                     = ["api://AzureADTokenExchange"]
-  issuer                       = azurerm_kubernetes_cluster.this.oidc_issuer_url
-  user_assigned_identity_id    = azurerm_user_assigned_identity.keyvault.id
-  subject                      = "system:serviceaccount:${local.keyvault-ns}:${local.keyvault-sa_name}"
+  count                     = try(var.config.service_mesh_profile.enabled, null) == "skip" ? 0 : 1
+  name                      = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.keyvault-ns}-${local.keyvault-sa_name}"
+  audience                  = ["api://AzureADTokenExchange"]
+  issuer                    = azurerm_kubernetes_cluster.this.oidc_issuer_url
+  user_assigned_identity_id = azurerm_user_assigned_identity.keyvault.id
+  subject                   = "system:serviceaccount:${local.keyvault-ns}:${local.keyvault-sa_name}"
 }
 
 data "azurerm_key_vault" "keyvault" {

@@ -34,7 +34,7 @@ locals {
 
       workload_identity_enabled = true
 
-      
+
 
       network_profile = {
         outbound_type       = "userDefinedRouting"
