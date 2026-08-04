@@ -12,12 +12,12 @@ resource "azurerm_user_assigned_identity" "crossplane" {
 }
 
 resource "azurerm_federated_identity_credential" "crossplane" {
-  count      = local.crossplane-enabled ? 1 : 0
-  name       = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.crossplane-ns}-${local.crossplane-sa_name}"
-  audience   = ["api://AzureADTokenExchange"]
-  issuer     = azurerm_kubernetes_cluster.this.oidc_issuer_url
-  parent_id  = azurerm_user_assigned_identity.crossplane[count.index].id
-  subject    = "system:serviceaccount:${local.crossplane-ns}:${local.crossplane-sa_name}"
+  count              = local.crossplane-enabled ? 1 : 0
+  name               = "${azurerm_kubernetes_cluster.this.name}-ServiceAccount-${local.crossplane-ns}-${local.crossplane-sa_name}"
+  audience           = ["api://AzureADTokenExchange"]
+  issuer             = azurerm_kubernetes_cluster.this.oidc_issuer_url
+  user_assigned_identity_id = azurerm_user_assigned_identity.crossplane[count.index].id
+  subject            = "system:serviceaccount:${local.crossplane-ns}:${local.crossplane-sa_name}"
 }
 
 resource "azurerm_role_assignment" "crossplane_subscrption_contributor" {
