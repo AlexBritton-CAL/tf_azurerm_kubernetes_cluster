@@ -2,17 +2,6 @@ locals {
   cluster_vnet_subnet_id_prefix = "/subscriptions/${var.global_config.global.subscription_id}/resourceGroups/${var.global_config.global.spoke.network.virtual_network_resource_group_name}/providers/Microsoft.Network/virtualNetworks/${var.global_config.global.spoke.network.virtual_network_name}/subnets/"
   module_defaults = {
 
-    identity = {
-      certmanager_identity = {
-        name = "${var.resource_prefix}-${var.instance_name}-aks-certmanagerid"
-      }
-      keyvault_identity = {
-        name = "${var.resource_prefix}-${var.instance_name}-aks-keyvaultid"
-      }
-      crossplane_identity = {
-        name = "${var.resource_prefix}-${var.instance_name}-aks-crossplaneid"
-      }
-    }
     kubernetes_cluster = {
       node_resource_group    = try(var.config.node_resource_group_name, replace(var.resource_group_name, "-rg", "-nodes-rg"))
       oidc_issuer_enabled    = true
@@ -34,7 +23,7 @@ locals {
 
       workload_identity_enabled = true
 
-      
+
 
       network_profile = {
         outbound_type       = "userDefinedRouting"
@@ -51,7 +40,7 @@ locals {
         mode                             = "Istio"
         internal_ingress_gateway_enabled = true
         external_ingress_gateway_enabled = false
-        revisions                        = ["asm-1-27"]
+        revisions                        = ["asm-1-29"]
       }
 
       default_node_pool = {
@@ -113,6 +102,18 @@ locals {
       private_link_service = {
         name      = "plink"
         subnet_id = "${local.cluster_vnet_subnet_id_prefix}app-snet"
+      }
+    }
+
+    identity = {
+      certmanager_identity = {
+        name = "${var.resource_prefix}-${var.instance_name}-aks-certmanagerid"
+      }
+      keyvault_identity = {
+        name = "${var.resource_prefix}-${var.instance_name}-aks-keyvaultid"
+      }
+      crossplane_identity = {
+        name = "${var.resource_prefix}-${var.instance_name}-aks-crossplaneid"
       }
     }
   }

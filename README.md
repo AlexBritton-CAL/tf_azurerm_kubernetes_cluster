@@ -88,7 +88,7 @@ azurerm_kubernetes_cluster:
       internal_ingress_gateway_enabled: true
       external_ingress_gateway_enabled: false
       revisions:
-        - asm-1-25
+        - asm-1-27
 
     default_node_pool:
       name: default
@@ -223,7 +223,7 @@ Each node pool (default and additional) supports two mutually exclusive ways to 
 | Name | Version |
 |---|---|
 | Terraform | `>= 1.14.0` |
-| hashicorp/azurerm | `~> 4.62.1` |
+| hashicorp/azurerm | `~> 4.81.0` |
 
 ### Required provider aliases
 
