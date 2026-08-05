@@ -119,7 +119,7 @@ resource "azurerm_kubernetes_cluster" "this" {
       microsoft_defender,
       azure_policy_enabled,
       service_mesh_profile[0].revisions,
-      default_node_pool.node_count
+      default_node_pool[0].node_count
     ]
 
     precondition {
