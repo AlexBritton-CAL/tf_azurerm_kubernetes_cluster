@@ -131,6 +131,12 @@ resource "azurerm_kubernetes_cluster" "this" {
       error_message = "The name must be between 1 and 63 characters long, alphanumerics, underscores, and hyphens, start and end with alphanumeric, cluster names must be unique within a resource group."
     }
   }
+
+  timeouts {
+    create = "60m"
+    update = "60m"
+    delete = "60m"
+  }
 }
 
 module "azurerm_kubernetes_cluster_node_pool" {
