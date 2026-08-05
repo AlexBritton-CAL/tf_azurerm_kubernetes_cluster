@@ -66,8 +66,8 @@ Three provider aliases are required by the consuming configuration:
 - **Network**: Azure CNI overlay, Cilium data plane + policy, service CIDR `10.0.11.0/24`, pod CIDR `10.244.0.0/16`
 - **Service mesh**: Istio (`asm-1-25`) with internal ingress gateway enabled
 - **Cluster identity**: `UserAssigned`
-- **Default node pool**: `Standard_B4s_v2`, autoscaling 2–5, system-only (`only_critical_addons_enabled = true`), across zones 1/2/3
-- **Additional node pools**: `Standard_B4ms`, autoscaling 1–4, max 50 pods, across zones 1/2/3
+- **Default node pool**: `Standard_D4s_v5`, autoscaling 2–5, system-only (`only_critical_addons_enabled = true`), across zones 1/2/3
+- **Additional node pools**: `Standard_D4s_v5`, autoscaling 1–4, max 50 pods, across zones 1/2/3
 - **Maintenance windows**: Weekly on Saturday (upgrades) and Sunday (node OS) at 02:00 UTC
 - **Workload autoscaler**: KEDA and VPA both enabled
 - **Key Vault secrets provider**: enabled with 2-minute rotation interval

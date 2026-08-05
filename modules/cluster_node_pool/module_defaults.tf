@@ -10,7 +10,7 @@ locals {
       max_count            = 4
       auto_scaling_enabled = true
 
-      vm_size  = "Standard_B4ms"
+      vm_size  = "Standard_D4s_v5"
       max_pods = 50
       zones    = ["1", "2", "3"] # Deploy across availability zones
 

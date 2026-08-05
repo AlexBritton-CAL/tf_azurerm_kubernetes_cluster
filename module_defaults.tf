@@ -60,7 +60,7 @@ locals {
         node_count                   = 2
         max_count                    = 5
         auto_scaling_enabled         = true
-        vm_size                      = "Standard_B4s_v2"
+        vm_size                      = "Standard_D4s_v5"
         temporary_name_for_rotation  = "systemtemp"
         only_critical_addons_enabled = true
         zones                        = ["1", "2", "3"] # Deploy across availability zones
