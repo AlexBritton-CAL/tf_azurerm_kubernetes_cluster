@@ -4,8 +4,8 @@ module "rbac_aks" {
   context       = "nonprod"
   # context = var.config.context
 
-  default_groups  = merge(try(var.global_config.RBAC.default_groups, []), try(var.config.RBAC.default_groups, []))
-  elevated_groups = merge(try(var.global_config.RBAC.elevated_groups, []), try(var.config.RBAC.elevated_groups, []))
+  default_groups  = try(var.global_config.RBAC.default_groups, [])
+  elevated_groups = try(var.global_config.RBAC.elevated_groups, [])
 
   resource_id = "/subscriptions/${var.global_config.global.subscription_id}/resourceGroups/${var.resource_group_name}"
 }
