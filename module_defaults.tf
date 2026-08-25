@@ -23,6 +23,8 @@ locals {
 
       workload_identity_enabled = true
 
+      appconfig_enabled = false
+
 
 
       network_profile = {

@@ -36,3 +36,14 @@ variable "location" {
   description = "Azure region where the resource should be deployed."
 }
 
+variable "additional_elevated_roles" {
+  type = set(string)
+  description = "Optional: Set of additiaonl Elevated Role Names"
+  default = []
+}
+
+variable "additional_default_roles" {
+  type = set(string)
+  description = "Optional: Set of additiaonl Default Role Names"
+  default = []
+}
