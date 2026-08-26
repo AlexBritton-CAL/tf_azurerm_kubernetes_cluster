@@ -1,5 +1,5 @@
 module "rbac_aks" {
-  source        = "github.com/calastone/terraform-azurerm-rbac"
+  source        = "github.com/calastone/terraform-azurerm-rbac?ref=fix_order_issue"
   resource_type = "aks"
   context       = "nonprod"
   # context = var.config.context
